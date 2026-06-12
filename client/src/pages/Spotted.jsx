@@ -111,7 +111,7 @@ export default function Spotted() {
           {confessions.map((c, i) => (
             <div
               key={c._id}
-              className={`relative mb-6 break-inside-avoid rounded-xl bg-cream p-5 text-ink shadow-lifted ${
+              className={`relative mb-6 break-inside-avoid rounded-xl bg-cream p-5 text-carbon shadow-lifted ${
                 i % 3 === 0 ? '-rotate-1' : i % 3 === 1 ? 'rotate-1' : 'rotate-0'
               }`}
             >
@@ -119,13 +119,13 @@ export default function Spotted() {
               <p className="font-medium leading-relaxed">“{c.text}”</p>
               <div className="mt-4 flex items-center justify-between text-sm">
                 <span className="font-bold">— {c.pseudonym}</span>
-                <span className="rounded-full bg-ink/10 px-2 py-0.5 text-xs font-bold">@ {c.spot}</span>
+                <span className="rounded-full bg-carbon/10 px-2 py-0.5 text-xs font-bold">@ {c.spot}</span>
               </div>
-              <div className="mt-3 flex items-center gap-2 border-t border-ink/10 pt-3">
+              <div className="mt-3 flex items-center gap-2 border-t border-carbon/10 pt-3">
                 <button
                   onClick={() => react(c._id, 'hearts')}
                   className={`rounded-full px-2.5 py-1 text-sm font-bold transition ${
-                    c.hearted ? 'bg-flame/15 text-flame' : 'text-ink/50 hover:bg-ink/5'
+                    c.hearted ? 'bg-flame/15 text-flame' : 'text-carbon/50 hover:bg-carbon/5'
                   }`}
                 >
                   ❤️ {c.hearts}
@@ -133,17 +133,17 @@ export default function Spotted() {
                 <button
                   onClick={() => react(c._id, 'eyes')}
                   className={`rounded-full px-2.5 py-1 text-sm font-bold transition ${
-                    c.eyed ? 'bg-ink/15 text-ink' : 'text-ink/50 hover:bg-ink/5'
+                    c.eyed ? 'bg-carbon/15 text-carbon' : 'text-carbon/50 hover:bg-carbon/5'
                   }`}
                   title="was this… me?"
                 >
                   👀 {c.eyes}
                 </button>
-                <span className="ml-auto text-xs text-ink/40">{timeAgo(c.createdAt)}</span>
+                <span className="ml-auto text-xs text-carbon/40">{timeAgo(c.createdAt)}</span>
                 {c.mine && (
                   <button
                     onClick={() => remove(c._id)}
-                    className="text-xs font-bold text-ink/40 hover:text-flame"
+                    className="text-xs font-bold text-carbon/40 hover:text-flame"
                     title="Delete your confession"
                   >
                     🗑️

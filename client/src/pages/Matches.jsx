@@ -40,29 +40,29 @@ export default function Matches() {
           {matches.map((m, i) => (
             <div
               key={m.roomId}
-              className={`rounded-lg bg-cream p-3 pb-4 text-ink shadow-lifted transition hover:rotate-0 hover:scale-[1.02] ${
+              className={`rounded-lg bg-cream p-3 pb-4 text-carbon shadow-lifted transition hover:rotate-0 hover:scale-[1.02] ${
                 i % 2 ? 'rotate-1' : '-rotate-1'
               }`}
             >
-              <div className="dotgrid relative flex h-40 items-center justify-center rounded-sm bg-ink/90">
+              <div className="relative flex h-40 items-center justify-center rounded-sm bg-carbon/90">
                 <Avatar user={m.user} size="h-28 w-28" online={onlineIds.includes(String(m.user._id))} />
                 <span className="sticker absolute right-2 top-2 text-xs">{m.compatibility}% vibe</span>
               </div>
               <div className="mt-3 px-1">
                 <div className="flex items-baseline justify-between gap-2">
                   <h2 className="font-display text-xl font-black">{m.user.name}</h2>
-                  <span className="shrink-0 text-xs font-bold text-ink/50">
+                  <span className="shrink-0 text-xs font-bold text-carbon/50">
                     {m.user.branch} · {m.user.year}
                   </span>
                 </div>
-                <p className="mt-1 truncate text-sm text-ink/60">
+                <p className="mt-1 truncate text-sm text-carbon/60">
                   {m.lastMessage
                     ? `“${m.lastMessage.text}” · ${timeAgo(m.lastMessage.createdAt)}`
                     : 'No messages yet — break the ice 🧊'}
                 </p>
                 <Link
                   to={`/chat/${m.roomId}`}
-                  className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-ink px-4 py-2 text-sm font-bold text-paper transition hover:bg-flame"
+                  className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-carbon px-4 py-2 text-sm font-bold text-milk transition hover:bg-flame"
                 >
                   {m.lastMessage ? 'Continue the chat 💬' : 'Say hi first 👋'}
                 </Link>

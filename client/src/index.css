@@ -2,12 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Dark theme (default) — the original Mulaqat palette. RGB triplets for Tailwind alpha. */
+:root {
+  --c-ink: 21 16 13; /* page background */
+  --c-coal: 34 26 21; /* card surface */
+  --c-paper: 246 237 220; /* text */
+  --c-faded: 181 166 140; /* muted text */
+  --c-flame: 255 81 38;
+  --c-honey: 255 182 39;
+  --c-berry: 224 86 126;
+  color-scheme: dark;
+}
+
+/* Light theme — warm paper page, ink text, accents deepened for readability. */
+.light {
+  --c-ink: 244 236 219; /* page background: warm paper */
+  --c-coal: 252 247 235; /* card surface: lighter sheet */
+  --c-paper: 32 22 15; /* text: warm near-black */
+  --c-faded: 122 104 84;
+  --c-flame: 226 58 13;
+  --c-honey: 173 110 0;
+  --c-berry: 188 58 101;
+  color-scheme: light;
+}
+
 @layer base {
   body {
-    @apply bg-ink font-body text-paper antialiased;
+    @apply bg-ink font-body text-paper antialiased transition-colors duration-300;
   }
   ::selection {
-    @apply bg-flame text-paper;
+    @apply bg-flame text-milk;
   }
 }
 
@@ -16,7 +40,7 @@
     @apply w-full rounded-xl border border-paper/15 bg-coal px-4 py-3 text-paper placeholder-faded/50 outline-none transition focus:border-flame;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-flame px-6 py-3 font-bold text-paper transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-flame px-6 py-3 font-bold text-milk transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 rounded-full border border-paper/25 px-6 py-3 font-bold text-paper transition hover:border-paper/60 hover:bg-paper/5;
@@ -47,12 +71,12 @@
 }
 
 .dotgrid {
-  background-image: radial-gradient(rgba(246, 237, 220, 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(rgb(var(--c-paper) / 0.09) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
 .outline-text {
-  -webkit-text-stroke: 1.5px rgba(246, 237, 220, 0.25);
+  -webkit-text-stroke: 1.5px rgb(var(--c-paper) / 0.25);
   color: transparent;
 }
 
@@ -61,7 +85,7 @@
   height: 8px;
 }
 .nice-scroll::-webkit-scrollbar-thumb {
-  background: rgba(246, 237, 220, 0.14);
+  background: rgb(var(--c-paper) / 0.14);
   border-radius: 8px;
 }
 .nice-scroll::-webkit-scrollbar-track {

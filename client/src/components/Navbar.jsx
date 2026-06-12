@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Avatar from './Avatar';
+import ThemeToggle from './ThemeToggle';
 
 const LINKS = [
   { to: '/discover', label: 'Discover', icon: '🃏' },
@@ -48,12 +49,13 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             {admirers > 0 && (
               <span
-                className="hidden rotate-2 bg-berry px-2 py-0.5 text-xs font-bold text-paper shadow-sticker sm:inline-block"
+                className="hidden rotate-2 bg-berry px-2 py-0.5 text-xs font-bold text-milk shadow-sticker sm:inline-block"
                 title="People who liked you — keep swiping to find them!"
               >
                 {admirers} admirer{admirers > 1 ? 's' : ''} 👀
               </span>
             )}
+            <ThemeToggle />
             <Link to="/profile" title="Your profile">
               <Avatar user={user} size="h-9 w-9" />
             </Link>

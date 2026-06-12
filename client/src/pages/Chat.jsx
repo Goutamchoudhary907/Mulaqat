@@ -181,12 +181,12 @@ export default function Chat() {
                     <div
                       className={`max-w-[75%] rounded-2xl px-4 py-2 ${
                         mine
-                          ? 'rounded-br-sm bg-flame text-paper'
+                          ? 'rounded-br-sm bg-flame text-milk'
                           : 'rounded-bl-sm border border-paper/10 bg-coal'
                       }`}
                     >
                       <p className="break-words">{msg.text}</p>
-                      <p className={`mt-0.5 text-right text-[10px] ${mine ? 'text-paper/70' : 'text-faded/70'}`}>
+                      <p className={`mt-0.5 text-right text-[10px] ${mine ? 'text-milk/70' : 'text-faded/70'}`}>
                         {clockTime(msg.createdAt)}
                       </p>
                     </div>

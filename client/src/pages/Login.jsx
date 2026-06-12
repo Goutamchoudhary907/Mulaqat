@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { errMsg } from '../lib/api';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function Login() {
   const { login } = useAuth();
@@ -27,9 +28,12 @@ export default function Login() {
   return (
     <div className="grain dotgrid flex min-h-screen items-center justify-center bg-ink px-4 py-10">
       <div className="w-full max-w-md">
-        <Link to="/" className="font-display text-3xl font-black italic">
-          Mulaqat<span className="text-flame">.</span>
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link to="/" className="font-display text-3xl font-black italic">
+            Mulaqat<span className="text-flame">.</span>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <div className="card-paper relative mt-6 p-8">
           <span className="sticker absolute -top-4 right-6 text-sm">welcome back 👋</span>

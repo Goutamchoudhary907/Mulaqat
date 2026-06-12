@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { VIBE_QUESTIONS, avatarUrl } from '../lib/constants';
+import ThemeToggle from '../components/ThemeToggle';
 
 const MARQUEE_ITEMS = [
   'MEDI-CAPS UNIVERSITY × INDORE',
@@ -26,16 +27,16 @@ function Marquee() {
 function Polaroid({ seed, style, name, caption, className, rot }) {
   return (
     <figure
-      className={`absolute w-44 rounded-md bg-cream p-2 pb-4 text-ink shadow-lifted sm:w-52 ${className}`}
+      className={`absolute w-44 rounded-md bg-cream p-2 pb-4 text-carbon shadow-lifted sm:w-52 ${className}`}
       style={{ '--rot': rot }}
     >
       <span className="tape -top-3 left-1/2 -translate-x-1/2" />
-      <div className="dotgrid flex h-36 items-center justify-center rounded-sm bg-ink/90 sm:h-44">
+      <div className="flex h-36 items-center justify-center rounded-sm bg-carbon/90 sm:h-44">
         <img src={avatarUrl(style, seed)} alt={name} className="h-28 w-28 sm:h-36 sm:w-36" />
       </div>
       <figcaption className="mt-2 px-1">
         <span className="font-display text-base font-black leading-none">{name}</span>
-        <p className="mt-0.5 text-xs leading-snug text-ink/70">{caption}</p>
+        <p className="mt-0.5 text-xs leading-snug text-carbon/70">{caption}</p>
       </figcaption>
     </figure>
   );
@@ -82,6 +83,7 @@ export default function Landing() {
           Mulaqat<span className="text-flame">.</span>
         </span>
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Link to="/login" className="btn-ghost px-5 py-2 text-sm">Log in</Link>
           <Link to="/register" className="btn-primary px-5 py-2 text-sm">Join free</Link>
         </div>
@@ -117,7 +119,7 @@ export default function Landing() {
           <span className="sticker absolute right-2 top-2 z-10 animate-float-slow text-sm md:-right-2 md:top-0" style={{ '--rot': '8deg' }}>
             92% VIBE ✦
           </span>
-          <span className="absolute bottom-0 right-6 z-10 -rotate-6 bg-berry px-3 py-1 font-bold text-paper shadow-sticker md:bottom-8">
+          <span className="absolute bottom-0 right-6 z-10 -rotate-6 bg-berry px-3 py-1 font-bold text-milk shadow-sticker md:bottom-8">
             spotted @ canteen 👀
           </span>
         </div>
@@ -224,12 +226,12 @@ export default function Landing() {
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {SPOTTED_SAMPLES.map((s) => (
-              <blockquote key={s.who} className={`rounded-xl bg-cream p-5 text-ink shadow-lifted ${s.rot}`}>
+              <blockquote key={s.who} className={`rounded-xl bg-cream p-5 text-carbon shadow-lifted ${s.rot}`}>
                 <span className="tape -top-3 left-6" />
                 <p className="font-medium leading-relaxed">“{s.text}”</p>
                 <footer className="mt-4 flex items-center justify-between text-sm">
                   <span className="font-bold">— {s.who}</span>
-                  <span className="rounded-full bg-ink/10 px-2 py-0.5 text-xs font-bold">@ {s.spot}</span>
+                  <span className="rounded-full bg-carbon/10 px-2 py-0.5 text-xs font-bold">@ {s.spot}</span>
                 </footer>
               </blockquote>
             ))}

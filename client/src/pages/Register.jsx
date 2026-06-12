@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { errMsg } from '../lib/api';
 import { VIBE_QUESTIONS, INTERESTS, BRANCHES, YEARS, AVATAR_STYLES, avatarUrl } from '../lib/constants';
+import ThemeToggle from '../components/ThemeToggle';
 
 const STEPS = ['The basics', 'Campus life', 'Vibe check', 'Your face (sort of)'];
 
@@ -89,9 +90,12 @@ export default function Register() {
           <Link to="/" className="font-display text-3xl font-black italic">
             Mulaqat<span className="text-flame">.</span>
           </Link>
-          <Link to="/login" className="text-sm font-bold text-faded hover:text-paper">
-            Have an account? Log in
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/login" className="text-sm font-bold text-faded hover:text-paper">
+              Have an account? Log in
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Step progress — boarding-pass stubs */}

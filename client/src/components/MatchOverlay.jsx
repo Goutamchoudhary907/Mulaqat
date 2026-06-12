@@ -12,11 +12,11 @@ export default function MatchOverlay({ match, onClose }) {
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-ink/95 p-6 backdrop-blur-sm">
       <div className="animate-pop flex flex-col items-center text-center">
         <div className="flex items-center">
-          <div className="-rotate-6 rounded-2xl border-4 border-paper bg-cream p-2 shadow-lifted">
+          <div className="-rotate-6 rounded-2xl border-4 border-milk bg-cream p-2 shadow-lifted">
             <Avatar user={user} size="h-28 w-28" />
           </div>
           <span className="z-10 -mx-4 animate-heartbeat text-5xl">💘</span>
-          <div className="rotate-6 rounded-2xl border-4 border-paper bg-cream p-2 shadow-lifted">
+          <div className="rotate-6 rounded-2xl border-4 border-milk bg-cream p-2 shadow-lifted">
             <Avatar user={match.user} size="h-28 w-28" />
           </div>
         </div>

@@ -47,7 +47,7 @@ export default function Discover() {
           <p className="mt-1 text-sm text-faded">Sorted by vibe %, highest first. Drag or use the buttons.</p>
         </div>
         {admirers > 0 && (
-          <span className="rotate-1 bg-berry px-3 py-1.5 text-sm font-bold text-paper shadow-sticker">
+          <span className="rotate-1 bg-berry px-3 py-1.5 text-sm font-bold text-milk shadow-sticker">
             🔥 {admirers} {admirers === 1 ? 'person has' : 'people have'} liked you — find them!
           </span>
         )}

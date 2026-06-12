@@ -4,14 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#15100D',
-        coal: '#221A15',
-        paper: '#F6EDDC',
+        // Theme-aware tokens — values live in index.css (:root = dark, .light = light)
+        ink: 'rgb(var(--c-ink) / <alpha-value>)',
+        coal: 'rgb(var(--c-coal) / <alpha-value>)',
+        paper: 'rgb(var(--c-paper) / <alpha-value>)',
+        faded: 'rgb(var(--c-faded) / <alpha-value>)',
+        flame: 'rgb(var(--c-flame) / <alpha-value>)',
+        honey: 'rgb(var(--c-honey) / <alpha-value>)',
+        berry: 'rgb(var(--c-berry) / <alpha-value>)',
+        // Fixed "physical" colors — paper artifacts look the same in both themes
         cream: '#E9DCC3',
-        faded: '#B5A68C',
-        flame: '#FF5126',
-        honey: '#FFB627',
-        berry: '#E0567E',
+        carbon: '#15100D',
+        milk: '#F6EDDC',
       },
       fontFamily: {
         display: ['Fraunces', 'Georgia', 'serif'],
