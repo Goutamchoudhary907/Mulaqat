@@ -1,0 +1,86 @@
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { io } from 'socket.io-client';
+import api from '../lib/api';
+import { API_URL } from '../lib/constants';
+
+const AuthContext = createContext(null);
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useAuth = () => useContext(AuthContext);
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [admirers, setAdmirers] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [onlineIds, setOnlineIds] = useState([]);
+  const socketRef = useRef(null);
+
+  const connectSocket = (token) => {
+    if (socketRef.current) socketRef.current.disconnect();
+    const socket = io(API_URL, { auth: { token } });
+    socket.on('presence', (ids) => setOnlineIds(ids));
+    socketRef.current = socket;
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('mulaqat_token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    api
+      .get('/auth/me')
+      .then(({ data }) => {
+        setUser(data.user);
+        setAdmirers(data.admirers);
+        connectSocket(token);
+      })
+      .catch(() => localStorage.removeItem('mulaqat_token'))
+      .finally(() => setLoading(false));
+
+    return () => socketRef.current?.disconnect();
+  }, []);
+
+  const saveSession = ({ token, user }) => {
+    localStorage.setItem('mulaqat_token', token);
+    setUser(user);
+    connectSocket(token);
+  };
+
+  const login = async (email, password) => {
+    const { data } = await api.post('/auth/login', { email, password });
+    saveSession(data);
+  };
+
+  const register = async (payload) => {
+    const { data } = await api.post('/auth/register', payload);
+    saveSession(data);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('mulaqat_token');
+    socketRef.current?.disconnect();
+    socketRef.current = null;
+    setUser(null);
+    setAdmirers(0);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        admirers,
+        setAdmirers,
+        loading,
+        login,
+        register,
+        logout,
+        onlineIds,
+        getSocket: () => socketRef.current,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
