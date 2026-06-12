@@ -3,7 +3,7 @@ export const API_URL = 'http://localhost:5000';
 export const VIBE_QUESTIONS = [
   {
     q: "It's 6 PM after the last lecture. Where are you?",
-    options: ['Chai at the tapri ☕', 'Straight home, headphones on 🎧', 'Ground — sports till dark 🏏', 'Roaming Treasure Island 🛍️'],
+    options: ['Chai at Datre ☕', 'Straight home, headphones on 🎧', 'Ground — sports till dark 🏏', 'Roaming Treasure Island 🛍️'],
   },
   {
     q: 'Exam season strategy?',
@@ -15,7 +15,7 @@ export const VIBE_QUESTIONS = [
   },
   {
     q: 'Ideal first mulaqat?',
-    options: ['Canteen samosa date 🥟', 'Sunset walk around campus 🌇', 'Movie + bhutta 🍿', 'Long ride on the bypass 🏍️'],
+    options: ['Samosa at the Main Canteen 🥟', 'Sunset walk to MediSquare 🌇', 'Movie + bhutta 🍿', 'Long ride on the bypass 🏍️'],
   },
   {
     q: 'Your texting style?',
@@ -37,8 +37,8 @@ export const BRANCHES = [
 export const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'PG'];
 
 export const SPOTS = [
-  'Canteen', 'Library', 'AB Block', 'Sports Ground', 'Parking', 'Auditorium',
-  'Hostel Gate', 'Bus Stop', 'Fountain', 'Somewhere on campus',
+  'MediSquare', 'Main Canteen', 'Datre', 'V Block', 'Q Block', 'CKD',
+  'CKD Square', 'Library', 'Bus Stand', 'Somewhere on campus',
 ];
 
 export const AVATAR_STYLES = ['adventurer', 'lorelei', 'notionists', 'micah', 'open-peeps', 'big-smile'];

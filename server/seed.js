@@ -29,12 +29,12 @@ const SAMPLE_STUDENTS = [
 ];
 
 const SAMPLE_CONFESSIONS = [
-  { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you turned a very bad Monday into a good one.', spot: 'Canteen' },
+  { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you turned a very bad Monday into a good one.', spot: 'Main Canteen' },
   { text: "We've shared the same library table four times now. I keep bringing extra pens hoping you'll forget yours again.", spot: 'Library' },
-  { text: 'You: red Activa, always parked slightly crooked. Me: judging, but also kind of charmed.', spot: 'Parking' },
-  { text: 'Whoever played the guitar near the fountain on Friday evening — the whole crowd was pretending not to stare. I was not pretending.', spot: 'Fountain' },
-  { text: 'To the guy who gave up his seat during the fest and then stood for two hours: chivalry is alive and wearing a black hoodie.', spot: 'Auditorium' },
-  { text: 'We made eye contact for exactly 1.5 seconds at the bus stop and I have now planned our entire wedding. Normal behaviour.', spot: 'Bus Stop' },
+  { text: 'You: red Activa, always parked slightly crooked near CKD. Me: judging, but also kind of charmed.', spot: 'CKD Square' },
+  { text: 'Whoever played the guitar at MediSquare on Friday evening — the whole crowd was pretending not to stare. I was not pretending.', spot: 'MediSquare' },
+  { text: 'To the one who shares their Maggi at Datre without being asked: you are the standard. The absolute standard.', spot: 'Datre' },
+  { text: 'We made eye contact for exactly 1.5 seconds at the bus stand and I have now planned our entire wedding. Normal behaviour.', spot: 'Bus Stand' },
 ];
 
 export async function seedIfEmpty() {

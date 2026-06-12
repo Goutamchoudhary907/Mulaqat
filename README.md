@@ -18,7 +18,7 @@
 |----------|------|
 | Frontend | React 18 + Vite + Tailwind CSS (`client/`) |
 | Backend  | Node + Express, MVC architecture (`server/`) |
-| Database | MongoDB via Mongoose (embedded fallback — zero setup) |
+| Database | MongoDB via Mongoose (set `MONGO_URI` in `server/.env`) |
 | Realtime | Socket.io |
 | Auth     | JWT + bcrypt |
 
@@ -40,17 +40,19 @@ npm run dev
 
 Then open **http://localhost:5173**.
 
-### Database — zero setup required
+### Database
 
-No MongoDB installed? No problem. If `MONGO_URI` is not set in `server/.env`, the server
-starts an **embedded MongoDB** automatically (first launch downloads the binary, ~1–2 min).
-Data persists in `server/.mongo-data/`.
-
-To use MongoDB Atlas or a local install instead, set in `server/.env`:
+A real MongoDB instance is **required**. Set the connection string in `server/.env`:
 
 ```
-MONGO_URI=mongodb+srv://...   # or mongodb://127.0.0.1:27017/mulaqat
+MONGO_URI=mongodb://127.0.0.1:27017/mulaqat   # local install
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster>/mulaqat   # MongoDB Atlas
 ```
+
+The server exits with a clear error if it can't reach the database.
+
+> Note: `server/.mongo-data/` contains data from the old embedded-MongoDB setup.
+> It is kept for reference/migration and is no longer used by the app.
 
 ### Sample data
 
@@ -70,7 +72,7 @@ other, match, and watch the chat update live.
 
 ```
 server/                 # MVC backend
-├── config/db.js        # Mongo connection (+ embedded fallback)
+├── config/db.js        # MongoDB connection (MONGO_URI required)
 ├── models/             # User, Message, Confession
 ├── controllers/        # auth, users, match, messages, confessions
 ├── routes/             # one router per resource

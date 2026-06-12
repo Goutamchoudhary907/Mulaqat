@@ -3,42 +3,20 @@ import { Link } from 'react-router-dom';
 import { VIBE_QUESTIONS, avatarUrl } from '../lib/constants';
 import ThemeToggle from '../components/ThemeToggle';
 
-const MARQUEE_ITEMS = [
-  'MEDI-CAPS UNIVERSITY × INDORE',
-  'MATCH BY VIBE, NOT JUST PHOTOS',
-  'THE SPOTTED WALL IS ALWAYS WATCHING 👀',
-  'CAMPUS-ONLY. ALWAYS.',
-  'FROM AB BLOCK TO 56 DUKAN',
-  'CHAI DATES > COFFEE DATES',
+const CAMPUS_PLACES = [
+  'MediSquare', 'V Block', 'Q Block', 'Main Canteen', 'Datre', 'CKD Square', 'Library', 'Bus Stand',
 ];
 
-function Marquee() {
-  const strip = MARQUEE_ITEMS.map((item) => `${item}  ✦  `).join('');
+/** Slim divider ticker — the campus, scrolling by. */
+function PlacesTicker() {
+  const strip = CAMPUS_PLACES.map((p) => `${p}  ✦  `).join('');
   return (
-    <div className="overflow-hidden border-b border-ink/20 bg-honey py-2 text-ink">
-      <div className="flex w-max animate-marquee whitespace-nowrap font-bold tracking-widest">
+    <div className="overflow-hidden border-y border-paper/10 py-3">
+      <div className="flex w-max animate-marquee whitespace-nowrap text-sm font-bold uppercase tracking-[0.3em] text-faded/50">
         <span>{strip}</span>
         <span>{strip}</span>
       </div>
     </div>
-  );
-}
-
-function Polaroid({ seed, style, name, caption, className, rot }) {
-  return (
-    <figure
-      className={`absolute w-44 rounded-md bg-cream p-2 pb-4 text-carbon shadow-lifted sm:w-52 ${className}`}
-      style={{ '--rot': rot }}
-    >
-      <span className="tape -top-3 left-1/2 -translate-x-1/2" />
-      <div className="flex h-36 items-center justify-center rounded-sm bg-carbon/90 sm:h-44">
-        <img src={avatarUrl(style, seed)} alt={name} className="h-28 w-28 sm:h-36 sm:w-36" />
-      </div>
-      <figcaption className="mt-2 px-1">
-        <span className="font-display text-base font-black leading-none">{name}</span>
-        <p className="mt-0.5 text-xs leading-snug text-carbon/70">{caption}</p>
-      </figcaption>
-    </figure>
   );
 }
 
@@ -56,9 +34,9 @@ function Ticket({ number, title, children, accent }) {
 }
 
 const SPOTTED_SAMPLES = [
-  { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you made a bad Monday good.', who: 'Caffeinated Sparrow', spot: 'Canteen', rot: '-rotate-2' },
+  { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you made a bad Monday good.', who: 'Caffeinated Sparrow', spot: 'Main Canteen', rot: '-rotate-2' },
   { text: "We've shared the library table four times now. I bring extra pens hoping you'll forget yours.", who: 'Backbench Fox', spot: 'Library', rot: 'rotate-1' },
-  { text: 'You: red Activa, always parked crooked. Me: judging, but also kinda charmed.', who: 'Lowkey Panda', spot: 'Parking', rot: '-rotate-1' },
+  { text: 'You: red Activa, always parked crooked near CKD. Me: judging, but also kinda charmed.', who: 'Lowkey Panda', spot: 'CKD Square', rot: '-rotate-1' },
 ];
 
 const COMPARISONS = [
@@ -75,10 +53,9 @@ export default function Landing() {
 
   return (
     <div className="grain min-h-screen overflow-x-hidden bg-ink">
-      <Marquee />
-
-      {/* Nav */}
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
+      {/* Nav + hero share the first viewport — CTAs visible without scrolling */}
+      <div className="flex min-h-screen flex-col">
+      <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5">
         <span className="font-display text-3xl font-black italic tracking-tight">
           Mulaqat<span className="text-flame">.</span>
         </span>
@@ -89,50 +66,72 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="dotgrid relative mx-auto max-w-6xl px-4 pb-28 pt-10 md:pt-16">
-        <div className="relative z-10 max-w-2xl">
-          <span className="sticker text-sm">मुलाक़ात (n.) — an encounter, a meeting</span>
-          <h1 className="mt-6 font-display text-5xl font-black leading-[1.02] sm:text-7xl">
-            Somewhere between{' '}
-            <em className="text-flame">AB&nbsp;Block</em> and the{' '}
-            <em className="text-honey">chai&nbsp;line</em>, your person is waiting.
-          </h1>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-faded">
-            Mulaqat is Medi-Caps University&apos;s own corner of the internet — for crushes,
-            confessions and conversations that start with a <strong className="text-paper">vibe</strong>,
-            not a bio. No randoms. No bots. Just campus.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link to="/register" className="btn-primary text-lg">Start your story →</Link>
-            <Link to="/login" className="btn-ghost">I have an account</Link>
+      {/* Hero — one message, one visual */}
+      <section className="mx-auto flex w-full max-w-6xl flex-1 items-center px-4 pb-12 pt-6 md:pb-8">
+        <div className="grid w-full items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
+          {/* Words */}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.35em] text-faded">
+              Medi-Caps University · Indore
+            </p>
+            <h1 className="mt-5 font-display text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl">
+              Somewhere between <em className="text-flame">MediSquare</em> and the Main Canteen{' '}
+              <em className="text-honey">chai line</em>, your person is waiting.
+            </h1>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-faded">
+              Match by <strong className="text-paper">vibe</strong>, not just photos. No randoms,
+              no bots — just Medicaps.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-4">
+              <Link to="/register" className="btn-primary text-lg">Start your story →</Link>
+              <Link to="/login" className="btn-ghost">I have an account</Link>
+            </div>
+            <p className="mt-4 text-sm text-faded/70">
+              Free for Medicaps students · Anonymous until you choose not to be
+            </p>
           </div>
-          <p className="mt-4 text-sm text-faded/70">
-            Free forever for Medicaps students · Anonymous until you choose not to be
-          </p>
-        </div>
 
-        {/* Floating polaroid collage */}
-        <div className="relative mt-16 h-72 md:absolute md:right-0 md:top-16 md:mt-0 md:h-auto md:w-[420px]">
-          <Polaroid seed="Priya Sharma" style="lorelei" name="Priya, CSE '27" caption="chai > coffee. fight me." className="left-2 top-0 animate-float-slow md:left-0 md:top-4" rot="-6deg" />
-          <Polaroid seed="Arjun Verma" style="adventurer" name="Arjun, Mech '26" caption="will write you bad poetry" className="left-1/2 top-10 -translate-x-1/4 animate-float-slower md:left-44 md:top-40" rot="5deg" />
-          <span className="sticker absolute right-2 top-2 z-10 animate-float-slow text-sm md:-right-2 md:top-0" style={{ '--rot': '8deg' }}>
-            92% VIBE ✦
-          </span>
-          <span className="absolute bottom-0 right-6 z-10 -rotate-6 bg-berry px-3 py-1 font-bold text-milk shadow-sticker md:bottom-8">
-            spotted @ canteen 👀
-          </span>
+          {/* One composed visual: a matched pair, polaroid-style */}
+          <div className="relative mx-auto w-64 sm:w-72">
+            <figure className="absolute -left-12 top-8 hidden w-44 rotate-[7deg] rounded-md bg-cream p-2 pb-4 opacity-70 shadow-lifted sm:block">
+              <div className="flex h-28 items-center justify-center rounded-sm bg-carbon/90">
+                <img src={avatarUrl('notionists', 'Sana Khan')} alt="" className="h-24 w-24" draggable={false} />
+              </div>
+            </figure>
+
+            <figure className="relative rotate-[-3deg] rounded-md bg-cream p-3 pb-4 text-carbon shadow-lifted">
+              <span className="tape -top-3 left-1/2 -translate-x-1/2" />
+              <div className="flex h-44 items-center justify-center rounded-sm bg-carbon/90 sm:h-48">
+                <img src={avatarUrl('lorelei', 'Priya Sharma')} alt="" className="-mr-7 h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
+                <img src={avatarUrl('adventurer', 'Arjun Verma')} alt="" className="h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
+              </div>
+              <figcaption className="mt-3 flex items-center justify-between gap-2 px-1">
+                <div>
+                  <span className="font-display text-lg font-black leading-none">Priya × Arjun</span>
+                  <p className="mt-0.5 text-xs text-carbon/60">met on Mulaqat · first chai @ Datre</p>
+                </div>
+                <span className="sticker shrink-0 text-xs">92% vibe</span>
+              </figcaption>
+            </figure>
+
+            <span className="absolute -bottom-4 -left-5 -rotate-3 bg-berry px-3 py-1 text-sm font-bold text-milk shadow-sticker">
+              spotted @ MediSquare 👀
+            </span>
+          </div>
         </div>
       </section>
+      </div>
+
+      <PlacesTicker />
 
       {/* Stats strip */}
-      <section className="border-y border-paper/10 bg-coal/60">
+      <section className="border-b border-paper/10 bg-coal/60">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 text-center md:grid-cols-4">
           {[
             ['5 questions', 'is all the vibe check takes'],
             ['0 randoms', 'campus-only, always'],
             ['24/7', 'the Spotted wall never sleeps'],
-            ['∞', 'canteen dates waiting to happen'],
+            ['∞', 'chai dates waiting to happen'],
           ].map(([big, small]) => (
             <div key={small}>
               <p className="font-display text-4xl font-black text-honey">{big}</p>
@@ -157,7 +156,7 @@ export default function Landing() {
             compatibility over face value.
           </Ticket>
           <Ticket number="03" title="Get spotted" accent="text-berry">
-            Locked eyes with someone at the canteen? Post it anonymously on the Spotted wall
+            Locked eyes with someone at MediSquare? Post it anonymously on the Spotted wall
             and let fate (and the reactions) do the rest.
           </Ticket>
         </div>
@@ -259,7 +258,7 @@ export default function Landing() {
         </p>
         <p className="mt-6 text-center text-sm text-faded">
           Made with <span className="text-flame">♥</span> for Medi-Caps University, Indore —
-          from AB Block to the bus stand and everywhere in between.
+          from MediSquare to the Bus Stand and everywhere in between.
         </p>
         <p className="mt-2 text-center text-xs text-faded/50">
           Be kind. Be respectful. The Spotted wall sees everything.
