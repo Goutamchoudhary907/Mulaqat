@@ -54,38 +54,35 @@ export default function Landing() {
   const teaser = VIBE_QUESTIONS[0];
 
   return (
-    <div className="grain min-h-screen overflow-x-hidden bg-ink">
+    <div className="grain relative min-h-screen overflow-x-clip bg-ink">
 
-      {/* Ambient glows — behind the cream panel */}
-      <div className="warm-glow" style={{ width: 520, height: 520, top: -180, right: -120, background: 'rgba(255,81,38,0.14)' }} />
-      <div className="warm-glow" style={{ width: 460, height: 460, top: 120, left: -180, background: 'rgba(224,86,126,0.10)' }} />
+      {/* Ambient glows — behind the cream panel (clipped by the relative root) */}
+      <div className="warm-glow" style={{ width: 520, height: 520, top: -180, right: -60, background: 'rgba(255,81,38,0.14)' }} />
+      <div className="warm-glow" style={{ width: 460, height: 460, top: 120, left: -120, background: 'rgba(224,86,126,0.10)' }} />
 
       {/* ── Cream panel — nav + hero ── */}
       <div className="relative z-10 mx-auto max-w-6xl px-4 pt-4">
         <div className="cream-panel on-cream" style={{ boxShadow: 'var(--shadow-md)', padding: 'clamp(18px, 2.5vw, 30px)' }}>
           {/* Nav */}
-          <nav className="flex items-center justify-between">
-            <span className="font-display text-3xl font-black italic" style={{ letterSpacing: '-0.03em' }}>
+          <nav className="flex items-center justify-between gap-2">
+            <span className="shrink-0 font-display text-2xl font-black italic sm:text-3xl" style={{ letterSpacing: '-0.03em' }}>
               Mulaqat<span className="text-flame">.</span>
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
               <ThemeToggle />
-              <Link to="/login" className="btn-ghost px-5 py-2.5 text-sm">Log in</Link>
-              <Link to="/register" className="btn-primary px-5 py-2.5 text-sm">Join free</Link>
+              <Link to="/login" className="btn-ghost px-3 py-2 text-sm sm:px-5 sm:py-2.5">Log in</Link>
+              <Link to="/register" className="btn-primary px-3 py-2 text-sm sm:px-5 sm:py-2.5">Join free</Link>
             </div>
           </nav>
 
           {/* Hero */}
-          <section style={{ padding: 'clamp(28px,5vw,56px) clamp(4px,1vw,12px) clamp(16px,2vw,28px)' }}>
+          <section style={{ padding: 'clamp(8px,1.5vw,20px) clamp(4px,1vw,12px) clamp(16px,2vw,28px)' }}>
             <div className="grid w-full items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
               {/* Words */}
               <div>
-                <p className="hero-rise eyebrow" style={{ '--d': '0.05s' }}>
-                  Medi-Caps University · Indore
-                </p>
                 <h1
                   className="hero-rise font-display font-black leading-[1.04]"
-                  style={{ '--d': '0.18s', fontSize: 'clamp(38px, 6vw, 64px)', marginTop: 20 }}
+                  style={{ '--d': '0.18s', fontSize: 'clamp(38px, 6vw, 64px)', marginTop: 0 }}
                 >
                   Somewhere between{' '}
                   <em className="underline-draw text-flame" style={{ '--d': '1.25s' }}>MediSquare</em>{' '}

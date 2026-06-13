@@ -85,6 +85,12 @@
 }
 
 @layer base {
+  /* Global guard against phantom horizontal scroll from decorative blobs /
+     oversized display type. `clip` (not hidden) keeps position: sticky working. */
+  html, body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
   body {
     @apply bg-ink text-paper antialiased;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
