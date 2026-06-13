@@ -27,16 +27,19 @@ export default function Login() {
 
   return (
     <div className="grain dotgrid flex min-h-screen items-center justify-center bg-ink px-4 py-10">
-      <div className="w-full max-w-md">
+      {/* ambient glow */}
+      <div className="warm-glow" style={{ width: 380, height: 380, top: -100, right: -80, background: 'rgba(255,81,38,0.12)' }} />
+
+      <div className="relative z-10 w-full max-w-md">
         <div className="flex items-center justify-between">
-          <Link to="/" className="font-display text-3xl font-black italic">
+          <Link to="/" className="font-display text-3xl font-black italic" style={{ letterSpacing: '-0.03em' }}>
             Mulaqat<span className="text-flame">.</span>
           </Link>
           <ThemeToggle />
         </div>
 
-        <div className="hero-rise card-paper relative mt-6 p-8" style={{ '--d': '0.1s' }}>
-          <span className="sticker absolute -top-4 right-6 text-sm">welcome back 👋</span>
+        <div className="card-elevated hero-rise relative mt-6 p-8" style={{ '--d': '0.1s' }}>
+          <span className="sticker absolute -top-4 right-6 text-sm">welcome back</span>
           <h1 className="font-display text-4xl font-black">Log in</h1>
           <p className="mt-2 text-faded">The campus missed you.</p>
 

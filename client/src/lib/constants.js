@@ -1,4 +1,7 @@
-export const API_URL = 'http://localhost:5000';
+// In production the API is served from the same origin (relative '/api'),
+// so this is empty. Set VITE_API_URL only to point at a separate backend.
+// In dev, Vite proxies '/api' and '/socket.io' to the backend (see vite.config.js).
+export const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const VIBE_QUESTIONS = [
   {
@@ -41,7 +44,48 @@ export const SPOTS = [
   'CKD Square', 'Library', 'Bus Stand', 'Somewhere on campus',
 ];
 
-export const AVATAR_STYLES = ['adventurer', 'lorelei', 'notionists', 'micah', 'open-peeps', 'big-smile'];
+export const AVATAR_STYLES = ['avataaars', 'adventurer', 'lorelei', 'micah', 'big-smile', 'notionists'];
 
-export const avatarUrl = (style, seed) =>
-  `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+export const avatarUrl = (style, seed, opts) => {
+  const params = new URLSearchParams({ seed: String(seed) });
+  if (opts) for (const [key, value] of Object.entries(opts)) params.set(key, String(value));
+  return `https://api.dicebear.com/7.x/${style}/svg?${params.toString()}`;
+};
+
+/* Clear, cartoon-style avatar sets that lean to the chosen gender.
+   `facialHairProbability` forces / removes beards so faces read male vs female. */
+const MALE_AVATARS = [
+  { style: 'avataaars', opts: { facialHairProbability: 100 } },
+  { style: 'micah', opts: { facialHairProbability: 100 } },
+  { style: 'adventurer' },
+  { style: 'notionists' },
+  { style: 'personas' },
+  { style: 'big-smile' },
+];
+
+const FEMALE_AVATARS = [
+  { style: 'lorelei' },
+  { style: 'avataaars', opts: { facialHairProbability: 0 } },
+  { style: 'micah', opts: { facialHairProbability: 0 } },
+  { style: 'big-smile' },
+  { style: 'adventurer' },
+  { style: 'notionists' },
+];
+
+const NEUTRAL_AVATARS = [
+  { style: 'avataaars' },
+  { style: 'micah' },
+  { style: 'adventurer' },
+  { style: 'lorelei' },
+  { style: 'big-smile' },
+  { style: 'notionists' },
+];
+
+/** Six avatar options appropriate for the user's gender. */
+export function avatarChoicesFor(gender, seedBase) {
+  const pool = gender === 'male' ? MALE_AVATARS : gender === 'female' ? FEMALE_AVATARS : NEUTRAL_AVATARS;
+  return pool.map(({ style, opts }, i) => ({
+    key: `${style}-${i}`,
+    url: avatarUrl(style, `${seedBase}-${i}`, opts),
+  }));
+}

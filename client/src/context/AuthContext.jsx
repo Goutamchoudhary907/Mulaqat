@@ -17,7 +17,8 @@ export function AuthProvider({ children }) {
 
   const connectSocket = (token) => {
     if (socketRef.current) socketRef.current.disconnect();
-    const socket = io(API_URL, { auth: { token } });
+    // Empty API_URL → connect to same origin (prod, and dev via Vite ws proxy).
+    const socket = io(API_URL || undefined, { auth: { token } });
     socket.on('presence', (ids) => setOnlineIds(ids));
     socketRef.current = socket;
   };

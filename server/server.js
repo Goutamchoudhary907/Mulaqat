@@ -1,5 +1,8 @@
 import express from 'express';
 import http from 'http';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server } from 'socket.io';
@@ -16,6 +19,8 @@ import confessionRoutes from './routes/confessionRoutes.js';
 
 dotenv.config();
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app = express();
 const server = http.createServer(app);
 
@@ -31,6 +36,18 @@ app.use('/api/users', userRoutes);
 app.use('/api/match', matchRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/confessions', confessionRoutes);
+
+// Any unmatched /api route is a real 404 — never fall through to the SPA.
+app.use('/api', (req, res) => res.status(404).json({ message: 'Not found' }));
+
+// Serve the built React app (single-service deploy). When client/dist exists,
+// static assets are served and every other route returns index.html so
+// client-side routing works on refresh / deep links.
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+}
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

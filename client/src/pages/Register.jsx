@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { errMsg } from '../lib/api';
-import { VIBE_QUESTIONS, INTERESTS, BRANCHES, YEARS, AVATAR_STYLES, avatarUrl } from '../lib/constants';
+import { VIBE_QUESTIONS, INTERESTS, BRANCHES, YEARS, avatarChoicesFor } from '../lib/constants';
 import ThemeToggle from '../components/ThemeToggle';
 
-const STEPS = ['The basics', 'Campus life', 'Vibe check', 'Your face (sort of)'];
+const STEPS = ['The basics', 'Campus life', 'Vibe check', 'Your face'];
 
 export default function Register() {
   const { register } = useAuth();
@@ -37,16 +37,11 @@ export default function Register() {
     );
 
   const avatarChoices = useMemo(
-    () =>
-      AVATAR_STYLES.map((style) => ({
-        style,
-        url: avatarUrl(style, `${form.name || 'medicaps'}-${shuffle}`),
-      })),
-    [form.name, shuffle]
+    () => avatarChoicesFor(form.gender, `${form.name || 'medicaps'}-${shuffle}`),
+    [form.gender, form.name, shuffle]
   );
 
   const validateStep = () => {
-    setError('');
     if (step === 0) {
       if (!form.name.trim()) return 'Tell us your name';
       if (!/^\S+@\S+\.\S+$/.test(form.email)) return 'That email looks off';
@@ -62,6 +57,7 @@ export default function Register() {
   const next = () => {
     const problem = validateStep();
     if (problem) return setError(problem);
+    setError('');
     setStep((s) => s + 1);
   };
 
@@ -80,29 +76,31 @@ export default function Register() {
 
   const choiceBtn = (active) =>
     `rounded-xl border-2 px-4 py-3 text-left font-bold transition ${
-      active ? 'border-flame bg-flame/15 text-flame' : 'border-paper/15 hover:border-paper/40'
+      active ? 'border-flame bg-flame/15 text-flame' : 'border-paper/15 text-paper hover:border-paper/40'
     }`;
 
   return (
     <div className="grain dotgrid min-h-screen bg-ink px-4 py-10">
-      <div className="mx-auto w-full max-w-2xl">
+      <div className="warm-glow" style={{ width: 420, height: 420, top: -140, right: -100, background: 'rgba(255,81,38,0.12)' }} />
+
+      <div className="relative z-10 mx-auto w-full max-w-2xl">
         <div className="flex items-center justify-between">
-          <Link to="/" className="font-display text-3xl font-black italic">
+          <Link to="/" className="font-display text-3xl font-black italic" style={{ letterSpacing: '-0.03em' }}>
             Mulaqat<span className="text-flame">.</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link to="/login" className="text-sm font-bold text-faded hover:text-paper">
+            <Link to="/login" className="text-sm font-bold text-faded hover:text-paper transition">
               Have an account? Log in
             </Link>
             <ThemeToggle />
           </div>
         </div>
 
-        {/* Step progress — boarding-pass stubs */}
+        {/* Step progress */}
         <div className="mt-8 flex gap-2">
           {STEPS.map((label, i) => (
             <div key={label} className="flex-1">
-              <div className={`h-1.5 rounded-full ${i <= step ? 'bg-flame' : 'bg-paper/15'}`} />
+              <div className={`h-1.5 rounded-full transition-colors duration-300 ${i <= step ? 'bg-flame' : 'bg-paper/15'}`} />
               <p className={`mt-1.5 hidden text-xs font-bold sm:block ${i === step ? 'text-paper' : 'text-faded/60'}`}>
                 {String(i + 1).padStart(2, '0')} · {label}
               </p>
@@ -110,7 +108,7 @@ export default function Register() {
           ))}
         </div>
 
-        <div className="hero-rise card-paper relative mt-6 p-6 sm:p-8" style={{ '--d': '0.1s' }}>
+        <div className="card-elevated hero-rise relative mt-6 p-6 sm:p-8" style={{ '--d': '0.1s' }}>
           <span className="sticker absolute -top-4 right-6 text-sm">{STEPS[step]}</span>
 
           {/* STEP 0 — basics */}
@@ -120,7 +118,6 @@ export default function Register() {
               <input className="field" placeholder="Your name" value={form.name} onChange={(e) => set('name', e.target.value)} />
               <input className="field" type="email" placeholder="you@medicaps.ac.in" value={form.email} onChange={(e) => set('email', e.target.value)} />
               <input className="field" type="password" placeholder="Password (6+ characters)" value={form.password} onChange={(e) => set('password', e.target.value)} />
-
               <div>
                 <p className="mb-2 text-sm font-bold text-faded">I am…</p>
                 <div className="grid grid-cols-3 gap-2">
@@ -165,7 +162,7 @@ export default function Register() {
               <div>
                 <p className="mb-2 text-sm font-bold text-faded">One line about you (make it count)</p>
                 <textarea
-                  className="field resize-none"
+                  className="field"
                   rows={2}
                   maxLength={300}
                   placeholder='e.g. "Chai > coffee. Found at the canteen more than in class."'
@@ -226,28 +223,32 @@ export default function Register() {
           {step === 3 && (
             <div className="animate-fade-up space-y-5">
               <div>
-                <h1 className="font-display text-3xl font-black sm:text-4xl">Pick your face 🎨</h1>
+                <h1 className="font-display text-3xl font-black sm:text-4xl">Pick your face</h1>
                 <p className="mt-1 text-faded">
                   Mulaqat starts everyone with a hand-drawn avatar — vibes first, photos when{' '}
-                  <em>you</em> decide. You can change it anytime.
+                  <em>you</em> decide.
                 </p>
               </div>
               <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                {avatarChoices.map(({ style, url }) => (
+                {avatarChoices.map(({ key, url }) => (
                   <button
                     type="button"
-                    key={style}
+                    key={key}
                     onClick={() => set('avatar', url)}
                     className={`rounded-2xl border-2 bg-coal p-2 transition ${
                       form.avatar === url ? 'border-flame bg-flame/10' : 'border-paper/15 hover:border-paper/40'
                     }`}
                   >
-                    <img src={url} alt={style} className="h-full w-full" />
+                    <img src={url} alt="avatar option" className="h-full w-full" />
                   </button>
                 ))}
               </div>
-              <button type="button" onClick={() => { setShuffle((s) => s + 1); set('avatar', ''); }} className="btn-ghost px-4 py-2 text-sm">
-                🎲 Shuffle the faces
+              <button
+                type="button"
+                onClick={() => { setShuffle((s) => s + 1); set('avatar', ''); }}
+                className="btn-ghost px-4 py-2 text-sm"
+              >
+                Shuffle the faces
               </button>
             </div>
           )}
@@ -264,7 +265,7 @@ export default function Register() {
               <button type="button" onClick={next} className="btn-primary px-7">Next →</button>
             ) : (
               <button type="button" onClick={submit} disabled={busy} className="btn-primary px-7">
-                {busy ? 'Creating…' : 'Enter Mulaqat 💌'}
+                {busy ? 'Creating…' : 'Enter Mulaqat'}
               </button>
             )}
           </div>

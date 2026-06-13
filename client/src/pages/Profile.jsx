@@ -1,7 +1,13 @@
 import { useMemo, useState } from 'react';
 import api, { errMsg } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
-import { INTERESTS, BRANCHES, YEARS, VIBE_QUESTIONS, AVATAR_STYLES, avatarUrl } from '../lib/constants';
+import { INTERESTS, BRANCHES, YEARS, VIBE_QUESTIONS, avatarChoicesFor } from '../lib/constants';
+
+const IcoDice = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="16" cy="16" r="1.5" fill="currentColor"/><circle cx="8" cy="16" r="1.5" fill="currentColor"/><circle cx="16" cy="8" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+  </svg>
+);
 
 export default function Profile() {
   const { user, setUser, admirers } = useAuth();
@@ -15,7 +21,7 @@ export default function Profile() {
     avatar: user.avatar,
   });
   const [shuffle, setShuffle] = useState(0);
-  const [status, setStatus] = useState(null); // { ok, msg }
+  const [status, setStatus] = useState(null);
   const [busy, setBusy] = useState(false);
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
@@ -31,8 +37,8 @@ export default function Profile() {
     );
 
   const avatarChoices = useMemo(
-    () => AVATAR_STYLES.map((style) => avatarUrl(style, `${form.name || 'medicaps'}-${shuffle}`)),
-    [form.name, shuffle]
+    () => avatarChoicesFor(user.gender, `${form.name || 'medicaps'}-${shuffle}`),
+    [user.gender, form.name, shuffle]
   );
 
   const save = async (e) => {
@@ -42,7 +48,7 @@ export default function Profile() {
     try {
       const { data } = await api.put('/users/me', form);
       setUser(data.user);
-      setStatus({ ok: true, msg: 'Saved! Looking good ✨' });
+      setStatus({ ok: true, msg: 'Saved — looking good.' });
     } catch (err) {
       setStatus({ ok: false, msg: errMsg(err, 'Could not save') });
     } finally {
@@ -57,7 +63,8 @@ export default function Profile() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-16 pt-8">
-      <h1 className="font-display text-4xl font-black">
+      <p className="eyebrow">Your presence on campus</p>
+      <h1 className="mt-2 font-display text-4xl font-black">
         Your <em className="text-honey">profile</em>
       </h1>
 
@@ -65,17 +72,17 @@ export default function Profile() {
       <div className="mt-6 grid grid-cols-3 gap-3 text-center">
         {[
           [user.matches?.length || 0, 'mulaqats'],
-          [admirers, 'secret admirers'],
+          [admirers, 'people like you'],
           [memberSince, 'here since'],
         ].map(([big, label]) => (
-          <div key={label} className="card-paper p-4">
+          <div key={label} className="card-elevated p-4">
             <p className="font-display text-2xl font-black text-honey">{big}</p>
             <p className="mt-0.5 text-xs uppercase tracking-wide text-faded">{label}</p>
           </div>
         ))}
       </div>
 
-      <form onSubmit={save} className="card-paper relative mt-6 space-y-6 p-6 sm:p-8">
+      <form onSubmit={save} className="card-elevated relative mt-6 space-y-6 p-6 sm:p-8">
         <span className="sticker absolute -top-4 right-6 text-sm">this is what they see</span>
 
         {/* Avatar */}
@@ -84,20 +91,25 @@ export default function Profile() {
           <div className="flex flex-wrap items-center gap-3">
             <img src={form.avatar} alt="you" className="h-24 w-24 rounded-2xl border-2 border-flame bg-coal p-1" />
             <div className="flex flex-wrap gap-2">
-              {avatarChoices.map((url) => (
+              {avatarChoices.map(({ key, url }) => (
                 <button
                   type="button"
-                  key={url}
+                  key={key}
                   onClick={() => set('avatar', url)}
                   className={`rounded-xl border-2 bg-coal p-1 transition ${
                     form.avatar === url ? 'border-flame' : 'border-paper/15 hover:border-paper/40'
                   }`}
                 >
-                  <img src={url} alt="option" className="h-14 w-14" />
+                  <img src={url} alt="avatar option" className="h-14 w-14" />
                 </button>
               ))}
-              <button type="button" onClick={() => setShuffle((s) => s + 1)} className="btn-ghost px-3 py-1 text-sm" title="New faces">
-                🎲
+              <button
+                type="button"
+                onClick={() => setShuffle((s) => s + 1)}
+                className="btn-ghost flex items-center gap-1.5 px-3 py-2 text-sm"
+                title="New faces"
+              >
+                <IcoDice /> Shuffle
               </button>
             </div>
           </div>
@@ -160,7 +172,7 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Vibe summary — read-only reminder of what's driving their matches */}
+        {/* Vibe summary */}
         <div className="rounded-xl border border-dashed border-honey/40 bg-honey/5 p-4">
           <p className="text-sm font-bold text-honey">Your vibe check answers</p>
           <ul className="mt-2 space-y-1 text-sm text-faded">
@@ -178,7 +190,7 @@ export default function Profile() {
         )}
 
         <button type="submit" disabled={busy} className="btn-primary w-full">
-          {busy ? 'Saving…' : 'Save changes 💾'}
+          {busy ? 'Saving…' : 'Save changes'}
         </button>
       </form>
     </main>

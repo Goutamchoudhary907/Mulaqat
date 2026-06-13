@@ -8,12 +8,11 @@ const CAMPUS_PLACES = [
   'MediSquare', 'V Block', 'Q Block', 'Main Canteen', 'Datre', 'CKD Square', 'Library', 'Bus Stand',
 ];
 
-/** Slim divider ticker — the campus, scrolling by. Fades at the edges, pauses on hover. */
 function PlacesTicker() {
-  const strip = CAMPUS_PLACES.map((p) => `${p}  ✦  `).join('');
+  const strip = CAMPUS_PLACES.map((p) => `${p}   ✦   `).join('');
   return (
-    <div className="ticker ticker-mask overflow-hidden border-y border-paper/10 py-3">
-      <div className="flex w-max animate-marquee whitespace-nowrap text-sm font-bold uppercase tracking-[0.3em] text-faded/50">
+    <div className="ticker ticker-mask overflow-hidden border-y border-paper/10 py-3.5">
+      <div className="flex w-max animate-marquee whitespace-nowrap text-xs font-bold uppercase tracking-[0.3em] text-faded/50">
         <span>{strip}</span>
         <span>{strip}</span>
       </div>
@@ -21,13 +20,15 @@ function PlacesTicker() {
   );
 }
 
-function Ticket({ number, title, children, accent }) {
+function Ticket({ number, title, children, color }) {
   return (
-    <div className="relative h-full rounded-2xl border-2 border-dashed border-paper/25 bg-coal p-6 transition hover:-translate-y-1 hover:border-paper/50">
-      {/* punched holes — ticket stub feel */}
+    <div
+      className="relative h-full rounded-2xl border border-dashed border-paper/20 bg-coal p-6 transition hover:-translate-y-1.5 hover:border-paper/40"
+      style={{ boxShadow: 'var(--shadow-sm)' }}
+    >
       <span className="absolute -left-3 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-ink" />
       <span className="absolute -right-3 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-ink" />
-      <span className={`font-display text-5xl font-black italic ${accent}`}>{number}</span>
+      <span className="font-display text-5xl font-black italic" style={{ color }}>{number}</span>
       <h3 className="mt-3 font-display text-2xl font-black">{title}</h3>
       <p className="mt-2 leading-relaxed text-faded">{children}</p>
     </div>
@@ -36,7 +37,7 @@ function Ticket({ number, title, children, accent }) {
 
 const SPOTTED_SAMPLES = [
   { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you made a bad Monday good.', who: 'Caffeinated Sparrow', spot: 'Main Canteen', rot: '-rotate-2' },
-  { text: "We've shared the library table four times now. I bring extra pens hoping you'll forget yours.", who: 'Backbench Fox', spot: 'Library', rot: 'rotate-1' },
+  { text: "We've shared the library table four times. I bring extra pens hoping you'll forget yours.", who: 'Backbench Fox', spot: 'Library', rot: 'rotate-1' },
   { text: 'You: red Activa, always parked crooked near CKD. Me: judging, but also kinda charmed.', who: 'Lowkey Panda', spot: 'CKD Square', rot: '-rotate-1' },
 ];
 
@@ -54,87 +55,113 @@ export default function Landing() {
 
   return (
     <div className="grain min-h-screen overflow-x-hidden bg-ink">
-      {/* Nav + hero share the first viewport — CTAs visible without scrolling */}
-      <div className="flex min-h-screen flex-col">
-      <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5">
-        <span className="font-display text-3xl font-black italic tracking-tight">
-          Mulaqat<span className="text-flame">.</span>
-        </span>
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <Link to="/login" className="btn-ghost px-5 py-2 text-sm">Log in</Link>
-          <Link to="/register" className="btn-primary px-5 py-2 text-sm">Join free</Link>
-        </div>
-      </nav>
 
-      {/* Hero — one message, one visual, one choreographed entrance */}
-      <section className="mx-auto flex w-full max-w-6xl flex-1 items-center px-4 pb-12 pt-6 md:pb-8">
-        <div className="grid w-full items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
-          {/* Words */}
-          <div>
-            <p className="hero-rise text-xs font-bold uppercase tracking-[0.35em] text-faded" style={{ '--d': '0.05s' }}>
-              Medi-Caps University · Indore
-            </p>
-            <h1 className="hero-rise mt-5 font-display text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl" style={{ '--d': '0.18s' }}>
-              Somewhere between{' '}
-              <em className="underline-draw text-flame" style={{ '--d': '1.25s' }}>MediSquare</em>{' '}
-              and the Main Canteen{' '}
-              <em className="underline-draw text-honey" style={{ '--d': '1.5s' }}>chai line</em>,
-              your person is waiting.
-            </h1>
-            <p className="hero-rise mt-5 max-w-md text-lg leading-relaxed text-faded" style={{ '--d': '0.32s' }}>
-              Match by <strong className="text-paper">vibe</strong>, not just photos. No randoms,
-              no bots — just Medicaps.
-            </p>
-            <div className="hero-rise mt-7 flex flex-wrap items-center gap-4" style={{ '--d': '0.45s' }}>
-              <Link to="/register" className="btn-primary text-lg">Start your story →</Link>
-              <Link to="/login" className="btn-ghost">I have an account</Link>
-            </div>
-            <p className="hero-rise mt-4 text-sm text-faded/70" style={{ '--d': '0.58s' }}>
-              Free for Medicaps students · Anonymous until you choose not to be
-            </p>
-          </div>
+      {/* Ambient glows — behind the cream panel */}
+      <div className="warm-glow" style={{ width: 520, height: 520, top: -180, right: -120, background: 'rgba(255,81,38,0.14)' }} />
+      <div className="warm-glow" style={{ width: 460, height: 460, top: 120, left: -180, background: 'rgba(224,86,126,0.10)' }} />
 
-          {/* One composed visual: a matched pair, developing like a real polaroid */}
-          <div className="relative mx-auto w-64 sm:w-72">
-            <figure className="polaroid-back absolute -left-12 top-8 hidden w-44 rotate-[7deg] rounded-md bg-cream p-2 pb-4 shadow-lifted sm:block">
-              <div className="flex h-28 items-center justify-center rounded-sm bg-carbon/90">
-                <img src={avatarUrl('notionists', 'Sana Khan')} alt="" className="h-24 w-24" draggable={false} />
-              </div>
-            </figure>
-
-            <figure className="polaroid-main relative rotate-[-3deg] rounded-md bg-cream p-3 pb-4 text-carbon shadow-lifted">
-              <span className="tape tape-stick -top-3 left-1/2 -translate-x-1/2" />
-              <div className="develop relative flex h-44 items-center justify-center rounded-sm bg-carbon/90 sm:h-48">
-                <img src={avatarUrl('lorelei', 'Priya Sharma')} alt="" className="-mr-7 h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
-                <img src={avatarUrl('adventurer', 'Arjun Verma')} alt="" className="h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
-                <span className="fade-in-late absolute inset-x-0 bottom-2 mx-auto w-max animate-heartbeat text-xl">💘</span>
-              </div>
-              <figcaption className="fade-in-late mt-3 flex items-center justify-between gap-2 px-1">
-                <div>
-                  <span className="font-display text-lg font-black leading-none">Priya × Arjun</span>
-                  <p className="mt-0.5 text-xs text-carbon/60">met on Mulaqat · first chai @ Datre</p>
-                </div>
-                <span className="sticker stamp-in shrink-0 text-xs" style={{ '--d': '1.5s', '--stamp-rot': '-3deg' }}>
-                  92% vibe
-                </span>
-              </figcaption>
-            </figure>
-
-            <span
-              className="stamp-in absolute -bottom-4 -left-5 -rotate-3 bg-berry px-3 py-1 text-sm font-bold text-milk shadow-sticker"
-              style={{ '--d': '1.75s', '--stamp-rot': '-3deg' }}
-            >
-              spotted @ MediSquare 👀
+      {/* ── Cream panel — nav + hero ── */}
+      <div className="relative z-10 mx-auto max-w-6xl px-4 pt-4">
+        <div className="cream-panel on-cream" style={{ boxShadow: 'var(--shadow-md)', padding: 'clamp(18px, 2.5vw, 30px)' }}>
+          {/* Nav */}
+          <nav className="flex items-center justify-between">
+            <span className="font-display text-3xl font-black italic" style={{ letterSpacing: '-0.03em' }}>
+              Mulaqat<span className="text-flame">.</span>
             </span>
-          </div>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Link to="/login" className="btn-ghost px-5 py-2.5 text-sm">Log in</Link>
+              <Link to="/register" className="btn-primary px-5 py-2.5 text-sm">Join free</Link>
+            </div>
+          </nav>
+
+          {/* Hero */}
+          <section style={{ padding: 'clamp(28px,5vw,56px) clamp(4px,1vw,12px) clamp(16px,2vw,28px)' }}>
+            <div className="grid w-full items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
+              {/* Words */}
+              <div>
+                <p className="hero-rise eyebrow" style={{ '--d': '0.05s' }}>
+                  Medi-Caps University · Indore
+                </p>
+                <h1
+                  className="hero-rise font-display font-black leading-[1.04]"
+                  style={{ '--d': '0.18s', fontSize: 'clamp(38px, 6vw, 64px)', marginTop: 20 }}
+                >
+                  Somewhere between{' '}
+                  <em className="underline-draw text-flame" style={{ '--d': '1.25s' }}>MediSquare</em>{' '}
+                  and the canteen{' '}
+                  <em className="underline-draw text-flame" style={{ '--d': '1.5s' }}>chai line</em>,
+                  your person is waiting.
+                </h1>
+                <p
+                  className="hero-rise max-w-md leading-relaxed text-faded"
+                  style={{ '--d': '0.32s', marginTop: 22, fontSize: 18 }}
+                >
+                  Match by <strong className="text-paper">vibe</strong>, not just photos.
+                  No randoms, no bots — just Medicaps.
+                </p>
+                <div
+                  className="hero-rise flex flex-wrap items-center gap-3"
+                  style={{ '--d': '0.45s', marginTop: 28 }}
+                >
+                  <Link to="/register" className="btn-primary text-base">Start your story →</Link>
+                  <Link to="/login" className="btn-ghost text-base">I have an account</Link>
+                </div>
+                <p
+                  className="hero-rise text-sm text-faded/70"
+                  style={{ '--d': '0.58s', marginTop: 16 }}
+                >
+                  Free for students · Anonymous until you choose not to be
+                </p>
+              </div>
+
+              {/* Polaroid visual */}
+              <div className="relative mx-auto w-64 sm:w-72">
+                <figure
+                  className="polaroid-back absolute -left-12 top-8 hidden w-44 rotate-[7deg] rounded-md bg-cream p-2 pb-4 shadow-lifted sm:block"
+                  style={{ '--rot': '7deg' }}
+                >
+                  <div className="flex h-28 items-center justify-center rounded-sm bg-carbon/90">
+                    <img src={avatarUrl('notionists', 'Sana Khan')} alt="" className="h-24 w-24" draggable={false} />
+                  </div>
+                </figure>
+
+                <figure className="polaroid-main relative rotate-[-3deg] rounded-md bg-cream p-3 pb-4 text-carbon shadow-lifted">
+                  <span className="tape tape-stick absolute -top-3 left-1/2 -translate-x-1/2" />
+                  <div className="develop relative flex h-44 items-center justify-center rounded-sm bg-carbon/90 sm:h-48">
+                    <img src={avatarUrl('lorelei', 'Priya Sharma')} alt="" className="-mr-7 h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
+                    <img src={avatarUrl('adventurer', 'Arjun Verma')} alt="" className="h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
+                    <span className="fade-in-late absolute inset-x-0 bottom-2 mx-auto w-max animate-heartbeat text-xl">💘</span>
+                  </div>
+                  <figcaption className="fade-in-late mt-3 flex items-center justify-between gap-2 px-1">
+                    <div>
+                      <span className="font-display text-lg font-black leading-none">Priya × Arjun</span>
+                      <p className="mt-0.5 text-xs text-carbon/60">met on Mulaqat · first chai @ Datre</p>
+                    </div>
+                    <span
+                      className="sticker stamp-in shrink-0 text-xs"
+                      style={{ '--d': '1.5s', '--stamp-rot': '-3deg' }}
+                    >
+                      92% vibe
+                    </span>
+                  </figcaption>
+                </figure>
+
+                <span
+                  className="stamp-in absolute -bottom-4 -left-5 -rotate-3 sticker sticker-berry px-3 py-1 text-sm shadow-sticker"
+                  style={{ '--d': '1.75s', '--stamp-rot': '-3deg' }}
+                >
+                  spotted @ MediSquare
+                </span>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
       </div>
 
       <PlacesTicker />
 
-      {/* Stats strip */}
+      {/* Stats */}
       <section className="border-b border-paper/10 bg-coal/60">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 text-center md:grid-cols-4">
           {[
@@ -154,33 +181,31 @@ export default function Landing() {
       {/* How it works */}
       <section className="mx-auto max-w-6xl px-4 py-24">
         <Reveal>
-          <h2 className="font-display text-4xl font-black sm:text-5xl">
+          <p className="eyebrow">How it works</p>
+          <h2 className="mt-3 font-display text-4xl font-black sm:text-5xl">
             How a <em className="text-berry">mulaqat</em> happens
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <Reveal delay={0}>
-            <Ticket number="01" title="Take the vibe check" accent="text-flame">
-              Five delightfully unserious questions — no &quot;describe yourself in three words&quot;.
-              We figure out who gets your 2 AM memes.
+            <Ticket number="01" title="Take the vibe check" color="rgb(var(--c-flame))">
+              Five delightfully unserious questions — we figure out who gets your 2 AM memes.
             </Ticket>
           </Reveal>
           <Reveal delay={130}>
-            <Ticket number="02" title="Swipe the campus" accent="text-honey">
-              Every profile is a Medicaps student. Your vibe % shows up before you swipe —
-              compatibility over face value.
+            <Ticket number="02" title="Swipe the campus" color="rgb(var(--c-honey))">
+              Every profile is a Medicaps student. Your vibe % shows before you swipe.
             </Ticket>
           </Reveal>
           <Reveal delay={260}>
-            <Ticket number="03" title="Get spotted" accent="text-berry">
-              Locked eyes with someone at MediSquare? Post it anonymously on the Spotted wall
-              and let fate (and the reactions) do the rest.
+            <Ticket number="03" title="Get spotted" color="rgb(var(--c-berry))">
+              Locked eyes at MediSquare? Post it anonymously and let the reactions do the rest.
             </Ticket>
           </Reveal>
         </div>
       </section>
 
-      {/* Interactive vibe teaser */}
+      {/* Vibe teaser */}
       <section className="border-y border-paper/10 bg-coal/60">
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
           <Reveal>
@@ -188,7 +213,7 @@ export default function Landing() {
             <h2 className="mt-6 font-display text-3xl font-black sm:text-4xl">{teaser.q}</h2>
           </Reveal>
           <Reveal delay={150}>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 text-left">
               {teaser.options.map((option, i) => (
                 <button
                   key={option}
@@ -196,7 +221,7 @@ export default function Landing() {
                   className={`rounded-xl border-2 px-5 py-4 text-left font-bold transition ${
                     picked === i
                       ? 'border-flame bg-flame/15 text-flame'
-                      : 'border-paper/15 hover:border-paper/40'
+                      : 'border-paper/15 text-paper hover:border-paper/40'
                   }`}
                 >
                   {option}
@@ -205,8 +230,8 @@ export default function Landing() {
             </div>
           </Reveal>
           {picked !== null && (
-            <p className="mt-6 animate-fade-up text-faded">
-              Noted 📝 — somewhere on campus, someone picked exactly the same thing.{' '}
+            <p className="animate-fade-up mt-6 text-faded">
+              Noted — somewhere on campus, someone picked exactly the same thing.{' '}
               <Link to="/register" className="font-bold text-honey underline underline-offset-4">
                 Go find them →
               </Link>
@@ -215,7 +240,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Why we're different */}
+      {/* Comparison */}
       <section className="mx-auto max-w-5xl px-4 py-24">
         <Reveal>
           <h2 className="text-center font-display text-4xl font-black sm:text-5xl">
@@ -224,9 +249,11 @@ export default function Landing() {
         </Reveal>
         <Reveal delay={150}>
           <div className="mt-12 overflow-hidden rounded-2xl border border-paper/15">
-            <div className="grid grid-cols-2 border-b border-paper/15 bg-coal text-center font-display text-xl font-black sm:text-2xl">
-              <p className="border-r border-paper/15 py-4 text-faded line-through decoration-flame/70">other apps</p>
-              <p className="py-4 text-honey">Mulaqat</p>
+            <div className="grid grid-cols-2 border-b border-paper/15 bg-coal text-center">
+              <p className="border-r border-paper/15 py-4 font-display text-xl font-black text-faded line-through decoration-flame/70">
+                other apps
+              </p>
+              <p className="py-4 font-display text-xl font-black text-honey">Mulaqat</p>
             </div>
             {COMPARISONS.map(([them, us]) => (
               <div key={us} className="grid grid-cols-2 border-b border-paper/10 text-sm last:border-0 sm:text-base">
@@ -244,7 +271,7 @@ export default function Landing() {
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <h2 className="font-display text-4xl font-black sm:text-5xl">
-                The <em className="text-flame">Spotted</em> wall 👀
+                The <em className="text-flame">Spotted</em> wall
               </h2>
               <p className="max-w-sm text-faded">
                 Anonymous campus confessions. Half noticeboard, half rom-com plot device.
@@ -255,8 +282,8 @@ export default function Landing() {
             {SPOTTED_SAMPLES.map((s, i) => (
               <Reveal key={s.who} delay={i * 130}>
                 <blockquote className={`relative h-full rounded-xl bg-cream p-5 text-carbon shadow-lifted ${s.rot}`}>
-                  <span className="tape -top-3 left-6" />
-                  <p className="font-medium leading-relaxed">“{s.text}”</p>
+                  <span className="tape absolute -top-3 left-6" />
+                  <p className="font-medium leading-relaxed">"{s.text}"</p>
                   <footer className="mt-4 flex items-center justify-between text-sm">
                     <span className="font-bold">— {s.who}</span>
                     <span className="rounded-full bg-carbon/10 px-2 py-0.5 text-xs font-bold">@ {s.spot}</span>
@@ -277,8 +304,8 @@ export default function Landing() {
           <p className="mx-auto mt-5 max-w-md text-faded">
             The vibe check takes two minutes. The right mulaqat lasts a lot longer.
           </p>
-          <Link to="/register" className="btn-primary mt-9 text-lg">
-            Create your profile — it&apos;s free 💌
+          <Link to="/register" className="btn-primary mt-9 inline-flex text-lg">
+            Create your profile — it&apos;s free
           </Link>
         </Reveal>
       </section>

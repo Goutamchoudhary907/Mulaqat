@@ -6,8 +6,17 @@ import { pseudonym } from './utils/helpers.js';
 
 dotenv.config();
 
-const avatar = (style, seed) =>
-  `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+// Clear, cartoon avatars that read male / female (beard forced on / off).
+const MALE_STYLES = ['avataaars', 'micah', 'adventurer', 'personas'];
+const FEMALE_STYLES = ['lorelei', 'avataaars', 'micah', 'big-smile'];
+
+const avatar = (gender, seed, i = 0) => {
+  const pool = gender === 'female' ? FEMALE_STYLES : MALE_STYLES;
+  const style = pool[i % pool.length];
+  const params = new URLSearchParams({ seed });
+  params.set('facialHairProbability', gender === 'female' ? '0' : '100');
+  return `https://api.dicebear.com/7.x/${style}/svg?${params.toString()}`;
+};
 
 // Every sample account's password is "medicaps123" — log in as any of them
 // to test matching and chat from both sides.
@@ -44,11 +53,11 @@ export async function seedIfEmpty() {
   console.log('🌱 Empty database — planting sample Medicaps students…');
 
   const users = await User.create(
-    SAMPLE_STUDENTS.map((s) => ({
+    SAMPLE_STUDENTS.map((s, i) => ({
       ...s,
       email: `${s.name.split(' ')[0].toLowerCase()}@medicaps.ac.in`,
       password: 'medicaps123',
-      avatar: avatar(s.style, s.name),
+      avatar: avatar(s.gender, s.name, i),
     }))
   );
 
