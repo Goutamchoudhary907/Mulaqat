@@ -12,6 +12,10 @@
   --c-honey: 255 182 39;
   --c-berry: 224 86 126;
   color-scheme: dark;
+
+  /* Motion language — every animation on the site uses one of these two curves. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Light theme — warm paper page, ink text, accents deepened for readability. */
@@ -40,7 +44,7 @@
     @apply w-full rounded-xl border border-paper/15 bg-coal px-4 py-3 text-paper placeholder-faded/50 outline-none transition focus:border-flame;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-flame px-6 py-3 font-bold text-milk transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-flame px-6 py-3 font-bold text-milk transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgb(var(--c-flame)/0.5)] active:translate-y-0 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 rounded-full border border-paper/25 px-6 py-3 font-bold text-paper transition hover:border-paper/60 hover:bg-paper/5;
@@ -90,4 +94,317 @@
 }
 .nice-scroll::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ————————————————————————————————————————————————
+   Motion. Few animations, deeply finished.
+   Entrances are choreographed; once settled, the page is still.
+   ———————————————————————————————————————————————— */
+
+/* Sheen sweep across primary buttons on hover. */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.3) 50%, transparent 62%);
+  transform: translateX(-160%) skewX(-12deg);
+}
+.btn-primary:hover::after {
+  transform: translateX(160%) skewX(-12deg);
+  transition: transform 0.9s ease;
+}
+
+/* — Hero entrance: staggered rise with depth-of-field blur — */
+.hero-rise {
+  opacity: 0;
+  animation: heroRise 1s var(--ease-out-expo) var(--d, 0s) forwards;
+}
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Accent words underline themselves after the headline lands. */
+.underline-draw {
+  position: relative;
+  white-space: nowrap;
+}
+.underline-draw::after {
+  content: '';
+  position: absolute;
+  left: 0.02em;
+  right: 0.02em;
+  bottom: 0.03em;
+  height: 0.07em;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.8;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: drawIn 0.7s var(--ease-out-expo) var(--d, 1.2s) forwards;
+}
+@keyframes drawIn {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* — The signature: a polaroid that develops like a real one — */
+.polaroid-main {
+  opacity: 0;
+  animation: polaroidSettle 1.1s var(--ease-spring) 0.35s forwards;
+}
+@keyframes polaroidSettle {
+  0% {
+    opacity: 0;
+    transform: translateY(36px) rotate(3deg) scale(0.92);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(-3deg) scale(1);
+  }
+}
+.polaroid-back {
+  opacity: 0;
+  animation: polaroidBack 1s var(--ease-out-expo) 0.95s forwards;
+}
+@keyframes polaroidBack {
+  from {
+    opacity: 0;
+    transform: translate(52px, 14px) rotate(-2deg);
+  }
+  to {
+    opacity: 0.7;
+    transform: translate(0, 0) rotate(7deg);
+  }
+}
+/* The photo resolves from overexposed chemistry to full color. */
+.develop {
+  animation: develop 2.4s ease 0.55s both;
+}
+@keyframes develop {
+  0% {
+    filter: saturate(0) contrast(0.6) brightness(1.75) sepia(0.35);
+  }
+  100% {
+    filter: none;
+  }
+}
+.tape-stick {
+  animation: tapeStick 0.5s var(--ease-spring) 1.2s both;
+}
+@keyframes tapeStick {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.2) rotate(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1) rotate(-6deg);
+  }
+}
+.fade-in-late {
+  opacity: 0;
+  animation: heroRise 0.8s var(--ease-out-expo) 1.1s forwards;
+}
+/* Stickers stamp down from above and squash on landing. */
+.stamp-in {
+  opacity: 0;
+  animation: stampIn 0.55s var(--ease-spring) var(--d, 1.45s) forwards;
+}
+@keyframes stampIn {
+  0% {
+    opacity: 0;
+    transform: scale(2.1) rotate(var(--stamp-rot, -3deg));
+  }
+  55% {
+    opacity: 1;
+    transform: scale(0.92) rotate(var(--stamp-rot, -3deg));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--stamp-rot, -3deg));
+  }
+}
+
+/* — Scroll reveals: rise + focus pull, once, then still — */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(10px);
+  transition:
+    opacity 0.9s var(--ease-out-expo) var(--rd, 0s),
+    transform 0.9s var(--ease-out-expo) var(--rd, 0s),
+    filter 0.9s var(--ease-out-expo) var(--rd, 0s);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* — Places ticker: edge fade + pauses politely on hover — */
+.ticker-mask {
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+.ticker:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* — Match overlay: the emotional payoff — */
+.overlay-in {
+  animation: overlayIn 0.45s ease both;
+}
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.match-card-l {
+  animation: matchCardL 0.8s var(--ease-spring) 0.15s both;
+}
+@keyframes matchCardL {
+  from {
+    opacity: 0;
+    transform: translate(-130px, 36px) rotate(-32deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-6deg);
+  }
+}
+.match-card-r {
+  animation: matchCardR 0.8s var(--ease-spring) 0.28s both;
+}
+@keyframes matchCardR {
+  from {
+    opacity: 0;
+    transform: translate(130px, 36px) rotate(32deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) rotate(6deg);
+  }
+}
+.match-title {
+  animation: matchTitle 0.7s var(--ease-spring) 0.55s both;
+}
+@keyframes matchTitle {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.7);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+/* Hearts drift up from behind the cards, swaying, forever. */
+.heart-burst {
+  position: absolute;
+  bottom: 32%;
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: heartRise var(--hd, 2.8s) ease-out var(--hdelay, 0s) infinite;
+}
+@keyframes heartRise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.4) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--hx, 0px)), -48vh) scale(1) rotate(var(--hr, 18deg));
+  }
+}
+
+/* — Swipe deck: the next card pulls into focus — */
+.card-promote {
+  animation: cardPromote 0.5s var(--ease-out-expo);
+}
+@keyframes cardPromote {
+  from {
+    opacity: 0.5;
+    transform: scale(0.95) translateY(16px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* — Spotted wall: heart reaction pops with overshoot — */
+.heart-pop {
+  display: inline-block;
+  animation: heartPop 0.45s var(--ease-spring);
+}
+@keyframes heartPop {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.5) rotate(-10deg);
+  }
+  60% {
+    transform: scale(0.88) rotate(7deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Accessibility: motion is a garnish, never a requirement. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise,
+  .polaroid-main,
+  .polaroid-back,
+  .fade-in-late,
+  .stamp-in,
+  .match-card-l,
+  .match-card-r,
+  .match-title,
+  .overlay-in,
+  .card-promote,
+  .heart-pop {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .develop,
+  .tape-stick,
+  .underline-draw::after,
+  .heart-burst {
+    animation: none !important;
+  }
+  .underline-draw::after {
+    transform: scaleX(1);
+  }
+  .reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
 }

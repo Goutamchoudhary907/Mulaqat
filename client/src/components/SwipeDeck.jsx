@@ -73,6 +73,7 @@ export default function SwipeDeck({ deck, myVibe, onSwipe }) {
             transform: `scale(${1 - (i + 1) * 0.04}) translateY(${(i + 1) * 14}px) rotate(${i % 2 ? 1.5 : -1.5}deg)`,
             zIndex: 2 - i,
             opacity: 0.7 - i * 0.25,
+            transition: 'transform 0.5s var(--ease-out-expo), opacity 0.5s ease',
           }}
         />
       ))}
@@ -86,6 +87,8 @@ export default function SwipeDeck({ deck, myVibe, onSwipe }) {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       >
+        {/* Keyed by card id so each new top card plays the focus-pull entrance */}
+        <div key={top._id} className="card-promote flex h-full flex-col">
         {/* LIKE / NOPE stamps */}
         <span
           className="absolute left-5 top-6 z-20 -rotate-12 border-4 border-emerald-400 px-3 py-1 font-display text-3xl font-black text-emerald-400"
@@ -139,6 +142,7 @@ export default function SwipeDeck({ deck, myVibe, onSwipe }) {
               ))}
             </div>
           )}
+        </div>
         </div>
       </div>
 

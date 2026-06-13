@@ -35,7 +35,7 @@ export default function Login() {
           <ThemeToggle />
         </div>
 
-        <div className="card-paper relative mt-6 p-8">
+        <div className="hero-rise card-paper relative mt-6 p-8" style={{ '--d': '0.1s' }}>
           <span className="sticker absolute -top-4 right-6 text-sm">welcome back 👋</span>
           <h1 className="font-display text-4xl font-black">Log in</h1>
           <p className="mt-2 text-faded">The campus missed you.</p>

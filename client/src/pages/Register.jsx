@@ -110,7 +110,7 @@ export default function Register() {
           ))}
         </div>
 
-        <div className="card-paper relative mt-6 p-6 sm:p-8">
+        <div className="hero-rise card-paper relative mt-6 p-6 sm:p-8" style={{ '--d': '0.1s' }}>
           <span className="sticker absolute -top-4 right-6 text-sm">{STEPS[step]}</span>
 
           {/* STEP 0 — basics */}

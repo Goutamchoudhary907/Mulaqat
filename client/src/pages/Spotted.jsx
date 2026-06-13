@@ -128,7 +128,7 @@ export default function Spotted() {
                     c.hearted ? 'bg-flame/15 text-flame' : 'text-carbon/50 hover:bg-carbon/5'
                   }`}
                 >
-                  ❤️ {c.hearts}
+                  <span className={c.hearted ? 'heart-pop' : 'inline-block'}>❤️</span> {c.hearts}
                 </button>
                 <button
                   onClick={() => react(c._id, 'eyes')}
