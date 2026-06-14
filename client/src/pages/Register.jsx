@@ -79,6 +79,11 @@ export default function Register() {
       active ? 'border-flame bg-flame/15 text-flame' : 'border-paper/15 text-paper hover:border-paper/40'
     }`;
 
+  const pillBtn = (active) =>
+    `rounded-xl border-2 px-2 py-3 text-center text-sm font-bold transition ${
+      active ? 'border-flame bg-flame/15 text-flame' : 'border-paper/15 text-paper hover:border-paper/40'
+    }`;
+
   return (
     <div className="grain dotgrid min-h-screen bg-ink px-4 py-10">
       <div className="warm-glow" style={{ width: 420, height: 420, top: -140, right: -100, background: 'rgba(255,81,38,0.12)' }} />
@@ -122,7 +127,7 @@ export default function Register() {
                 <p className="mb-2 text-sm font-bold text-faded">I am…</p>
                 <div className="grid grid-cols-3 gap-2">
                   {['male', 'female', 'other'].map((g) => (
-                    <button type="button" key={g} className={choiceBtn(form.gender === g)} onClick={() => set('gender', g)}>
+                    <button type="button" key={g} className={pillBtn(form.gender === g)} onClick={() => set('gender', g)}>
                       {g === 'male' ? 'A guy' : g === 'female' ? 'A girl' : 'Other'}
                     </button>
                   ))}
@@ -132,7 +137,7 @@ export default function Register() {
                 <p className="mb-2 text-sm font-bold text-faded">I want to meet…</p>
                 <div className="grid grid-cols-3 gap-2">
                   {['male', 'female', 'everyone'].map((g) => (
-                    <button type="button" key={g} className={choiceBtn(form.interestedIn === g)} onClick={() => set('interestedIn', g)}>
+                    <button type="button" key={g} className={pillBtn(form.interestedIn === g)} onClick={() => set('interestedIn', g)}>
                       {g === 'male' ? 'Guys' : g === 'female' ? 'Girls' : 'Everyone'}
                     </button>
                   ))}

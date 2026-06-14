@@ -10,7 +10,9 @@
     "seed": "node seed.js"
   },
   "nodemonConfig": {
-    "ignore": [".mongo-data/*"]
+    "ignore": [
+      ".mongo-data/*"
+    ]
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -19,6 +21,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
+    "node-cron": "^3.0.3",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {

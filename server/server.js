@@ -10,6 +10,7 @@ import { Server } from 'socket.io';
 import connectDB from './config/db.js';
 import { initSocket } from './socket/socket.js';
 import { seedIfEmpty } from './seed.js';
+import { startKeepAlive } from './utils/keepAlive.js';
 
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -59,5 +60,8 @@ const PORT = process.env.PORT || 5000;
 
 connectDB().then(async () => {
   if (process.env.SEED_ON_EMPTY === 'true') await seedIfEmpty();
-  server.listen(PORT, () => console.log(`💌 Mulaqat server running → http://localhost:${PORT}`));
+  server.listen(PORT, () => {
+    console.log(`💌 Mulaqat server running → http://localhost:${PORT}`);
+    startKeepAlive();
+  });
 });
