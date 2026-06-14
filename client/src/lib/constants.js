@@ -5,7 +5,7 @@ export const API_URL = import.meta.env.VITE_API_URL || '';
 export const VIBE_QUESTIONS = [
   {
     q: "It's 6 PM after the last lecture. Where are you?",
-    options: ['Chai at Datre ☕', 'Straight home, headphones on 🎧', 'Ground — sports till dark 🏏', 'Roaming Treasure Island 🛍️'],
+    options: ['Chai at Canteen ☕', 'Straight home, headphones on 🎧', 'Ground — sports till dark 🏏', 'Roaming Treasure Island 🛍️'],
   },
   {
     q: 'Exam season strategy?',
@@ -33,13 +33,13 @@ export const INTERESTS = [
 
 export const BRANCHES = [
   'CSE', 'IT', 'AIML', 'Data Science', 'ECE', 'EE', 'Mechanical', 'Civil',
-  'MBA', 'BBA', 'B.Com', 'B.Pharma', 'Law', 'Other',
+  'MBA', 'BBA', 'B.Com', 'B.Pharma', 'Law','BCA','MCA', 'Other',
 ];
 
-export const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'PG'];
+export const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'PG','Pass out'];
 
 export const SPOTS = [
-  'MediSquare', 'Main Canteen', 'Datre', 'V Block', 'Q Block', 'CKD',
+  'MediSquare', 'Canteen', 'V Block', 'Q Block', 'CKD','Admission cell',
   'CKD Square', 'Library', 'Bus Stand', 'Somewhere on campus',
 ];
 

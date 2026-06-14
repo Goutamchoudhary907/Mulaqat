@@ -5,7 +5,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import Reveal from '../components/Reveal';
 
 const CAMPUS_PLACES = [
-  'MediSquare', 'V Block', 'Q Block', 'Main Canteen', 'Datre', 'CKD Square', 'Library', 'Bus Stand',
+  'MediSquare', 'V Block', 'Q Block', 'Canteen', 'CKD Square', 'Library', 'Bus Stand',
 ];
 
 function PlacesTicker() {
@@ -133,7 +133,7 @@ export default function Landing() {
                   <figcaption className="fade-in-late mt-3 flex items-center justify-between gap-2 px-1">
                     <div>
                       <span className="font-display text-lg font-black leading-none">Priya × Arjun</span>
-                      <p className="mt-0.5 text-xs text-carbon/60">met on Mulaqat · first chai @ Datre</p>
+                      <p className="mt-0.5 text-xs text-carbon/60">met on Mulaqat · first chai @ Canteen</p>
                     </div>
                     <span
                       className="sticker stamp-in shrink-0 text-xs"
