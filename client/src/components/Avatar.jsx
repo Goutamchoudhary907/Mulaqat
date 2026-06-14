@@ -1,11 +1,11 @@
-import { avatarUrl } from '../lib/constants';
+import { niceAvatar } from '../lib/constants';
 
 /**
  * User avatar in a soft radial-gradient well with optional online dot.
  * Falls back to a generated DiceBear avatar from name.
  */
 export default function Avatar({ user, size = 48, online = false, ring = true, className = '' }) {
-  const src = user?.avatar || avatarUrl('adventurer', user?.name || 'mulaqat');
+  const src = user?.avatar || niceAvatar(user?.gender, user?.name || 'mulaqat');
   const px = typeof size === 'number' ? size : 48;
 
   return (

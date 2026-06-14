@@ -37,8 +37,8 @@ export default function Profile() {
     );
 
   const avatarChoices = useMemo(
-    () => avatarChoicesFor(user.gender, `${form.name || 'medicaps'}-${shuffle}`),
-    [user.gender, form.name, shuffle]
+    () => avatarChoicesFor(user.gender, shuffle),
+    [user.gender, shuffle]
   );
 
   const save = async (e) => {

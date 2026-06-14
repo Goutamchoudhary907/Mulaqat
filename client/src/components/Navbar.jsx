@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Avatar from './Avatar';
 import ThemeToggle from './ThemeToggle';
@@ -19,6 +19,9 @@ const LINKS = [
 export default function Navbar() {
   const { user, admirers, logout } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+ const inConversation = /^\/chat\/.+/.test(pathname);
 
   const handleLogout = () => { logout(); navigate('/'); };
 
@@ -74,7 +77,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile bottom tab bar */}
+      {!inConversation && (
       <nav
         className="fixed bottom-0 left-0 right-0 z-40 flex border-t border-paper/10 backdrop-blur-md md:hidden"
         style={{ background: 'color-mix(in srgb, rgb(var(--c-ink)) 92%, transparent)' }}
@@ -85,6 +88,7 @@ export default function Navbar() {
           </NavLink>
         ))}
       </nav>
+      )}
     </>
   );
 }

@@ -1,6 +1,5 @@
-// In production the API is served from the same origin (relative '/api'),
-// so this is empty. Set VITE_API_URL only to point at a separate backend.
-// In dev, Vite proxies '/api' and '/socket.io' to the backend (see vite.config.js).
+import { BOY_AVATARS, GIRL_AVATARS } from './avatars';
+
 export const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const VIBE_QUESTIONS = [
@@ -44,48 +43,54 @@ export const SPOTS = [
   'CKD Square', 'Library', 'Bus Stand', 'Somewhere on campus',
 ];
 
-export const AVATAR_STYLES = ['avataaars', 'adventurer', 'lorelei', 'micah', 'big-smile', 'notionists'];
-
 export const avatarUrl = (style, seed, opts) => {
-  const params = new URLSearchParams({ seed: String(seed) });
-  if (opts) for (const [key, value] of Object.entries(opts)) params.set(key, String(value));
+  const params = new URLSearchParams();
+  params.set('seed', String(seed));
+  if (opts) {
+    for (const [key, value] of Object.entries(opts)) {
+      if (Array.isArray(value)) value.forEach((v) => params.append(key, String(v)));
+      else params.set(key, String(value));
+    }
+  }
   return `https://api.dicebear.com/7.x/${style}/svg?${params.toString()}`;
 };
 
-/* Clear, cartoon-style avatar sets that lean to the chosen gender.
-   `facialHairProbability` forces / removes beards so faces read male vs female. */
-const MALE_AVATARS = [
-  { style: 'avataaars', opts: { facialHairProbability: 100 } },
-  { style: 'micah', opts: { facialHairProbability: 100 } },
-  { style: 'adventurer' },
-  { style: 'notionists' },
-  { style: 'personas' },
-  { style: 'big-smile' },
-];
+const FRIENDLY = {
+  mouth: ['default', 'smile', 'twinkle'],
+  eyes: ['default', 'happy', 'wink'],
+  eyebrows: ['default', 'defaultNatural', 'raisedExcitedNatural'],
+  accessoriesProbability: 0,
+  hairColor: ['2c1b18', '4a312c', '724133', 'a55728', 'b58143', 'c93305', 'd6b370'],
+};
+const MALE_HAIR = ['shortFlat', 'shortRound', 'shortWaved', 'shortCurly', 'theCaesar', 'theCaesarAndSidePart', 'sides', 'frizzle'];
+const FEMALE_HAIR = ['straight01', 'straight02', 'straightAndStrand', 'bob', 'bun', 'curly', 'curvy', 'longButNotTooLong', 'miaWallace', 'bigHair', 'frida', 'fro'];
+const MALE_CLOTHING = ['blazerAndShirt', 'blazerAndSweater', 'collarAndSweater', 'graphicShirt', 'hoodie', 'shirtCrewNeck', 'shirtVNeck'];
+const MALE_CLOTHES_COLORS = ['262e33', '3c4f5c', '5199e4', '25557c', '929598', '65c9ff', 'b1e2ff', 'e6e6e6'];
 
-const FEMALE_AVATARS = [
-  { style: 'lorelei' },
-  { style: 'avataaars', opts: { facialHairProbability: 0 } },
-  { style: 'micah', opts: { facialHairProbability: 0 } },
-  { style: 'big-smile' },
-  { style: 'adventurer' },
-  { style: 'notionists' },
-];
+const optsForGender = (gender) => {
+  if (gender === 'female') return { ...FRIENDLY, top: FEMALE_HAIR, facialHairProbability: 0 };
+  if (gender === 'male') {
+    return {
+      ...FRIENDLY, top: MALE_HAIR, facialHairProbability: 70, facialHair: ['beardLight', 'beardMedium', 'moustacheFancy'],
+      clothing: MALE_CLOTHING, clothesColor: MALE_CLOTHES_COLORS,
+    };
+  }
+  return { ...FRIENDLY, top: [...MALE_HAIR, ...FEMALE_HAIR], facialHairProbability: 30, facialHair: ['beardLight', 'moustacheFancy'] };
+};
 
-const NEUTRAL_AVATARS = [
-  { style: 'avataaars' },
-  { style: 'micah' },
-  { style: 'adventurer' },
-  { style: 'lorelei' },
-  { style: 'big-smile' },
-  { style: 'notionists' },
-];
+export const niceAvatar = (gender, seed) => avatarUrl('avataaars', seed, optsForGender(gender));
 
-/** Six avatar options appropriate for the user's gender. */
-export function avatarChoicesFor(gender, seedBase) {
-  const pool = gender === 'male' ? MALE_AVATARS : gender === 'female' ? FEMALE_AVATARS : NEUTRAL_AVATARS;
-  return pool.map(({ style, opts }, i) => ({
-    key: `${style}-${i}`,
-    url: avatarUrl(style, `${seedBase}-${i}`, opts),
-  }));
+const poolForGender = (gender) =>
+  gender === 'female' ? GIRL_AVATARS : gender === 'male' ? BOY_AVATARS : [...BOY_AVATARS, ...GIRL_AVATARS];
+
+const PER_PAGE = 12;
+
+export function avatarChoicesFor(gender, page = 0) {
+  const pool = poolForGender(gender);
+  const start = pool.length ? (Math.abs(page) * PER_PAGE) % pool.length : 0;
+  const count = Math.min(PER_PAGE, pool.length);
+  return Array.from({ length: count }, (_, i) => {
+    const idx = (start + i) % pool.length;
+    return { key: `${gender || 'x'}-${start + i}`, url: pool[idx] };
+  });
 }

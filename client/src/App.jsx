@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
@@ -21,10 +21,12 @@ function ScreenLoader() {
 /** Wraps app pages: requires login, adds the navbar + mobile tab-bar spacing. */
 function Protected({ children }) {
   const { user, loading } = useAuth();
+  const { pathname } = useLocation();
   if (loading) return <ScreenLoader />;
   if (!user) return <Navigate to="/login" replace />;
+ const inConversation = /^\/chat\/.+/.test(pathname);
   return (
-    <div className="grain min-h-screen bg-ink pb-20 md:pb-0">
+    <div className={`grain min-h-screen bg-ink ${inConversation ? '' : 'pb-20 md:pb-0'}`}>
       <Navbar />
       {children}
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { VIBE_QUESTIONS, avatarUrl } from '../lib/constants';
+import { VIBE_QUESTIONS, niceAvatar } from '../lib/constants';
 import ThemeToggle from '../components/ThemeToggle';
 import Reveal from '../components/Reveal';
 
@@ -69,9 +69,9 @@ export default function Landing() {
               Mulaqat<span className="text-flame">.</span>
             </span>
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-              <ThemeToggle />
               <Link to="/login" className="btn-ghost px-3 py-2 text-sm sm:px-5 sm:py-2.5">Log in</Link>
               <Link to="/register" className="btn-primary px-3 py-2 text-sm sm:px-5 sm:py-2.5">Join free</Link>
+              <ThemeToggle />
             </div>
           </nav>
 
@@ -119,15 +119,15 @@ export default function Landing() {
                   style={{ '--rot': '7deg' }}
                 >
                   <div className="flex h-28 items-center justify-center rounded-sm bg-carbon/90">
-                    <img src={avatarUrl('notionists', 'Sana Khan')} alt="" className="h-24 w-24" draggable={false} />
+                    <img src={niceAvatar('female', 'Sana Khan')} alt="" className="h-24 w-24" draggable={false} />
                   </div>
                 </figure>
 
                 <figure className="polaroid-main relative rotate-[-3deg] rounded-md bg-cream p-3 pb-4 text-carbon shadow-lifted">
                   <span className="tape tape-stick absolute -top-3 left-1/2 -translate-x-1/2" />
                   <div className="develop relative flex h-44 items-center justify-center rounded-sm bg-carbon/90 sm:h-48">
-                    <img src={avatarUrl('lorelei', 'Priya Sharma')} alt="" className="-mr-7 h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
-                    <img src={avatarUrl('adventurer', 'Arjun Verma')} alt="" className="h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
+                    <img src={niceAvatar('female', 'Priya Sharma')} alt="" className="-mr-7 h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
+                    <img src={niceAvatar('male', 'Arjun Verma')} alt="" className="h-32 w-32 sm:h-36 sm:w-36" draggable={false} />
                     <span className="fade-in-late absolute inset-x-0 bottom-2 mx-auto w-max animate-heartbeat text-xl">💘</span>
                   </div>
                   <figcaption className="fade-in-late mt-3 flex items-center justify-between gap-2 px-1">

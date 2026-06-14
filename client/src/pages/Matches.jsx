@@ -41,7 +41,7 @@ export default function Matches() {
           </div>
           <h2 className="font-display text-2xl font-black">No matches yet</h2>
           <p className="mt-2 text-faded">Every great campus story starts with a swipe. Get back out there.</p>
-          <Link to="/discover" className="btn-primary mt-6 inline-block">Back to the deck</Link>
+          <Link to="/discover" className="btn-primary mt-6 inline-block">Back to Discover</Link>
         </div>
       ) : (
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

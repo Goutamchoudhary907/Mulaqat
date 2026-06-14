@@ -37,8 +37,8 @@ export default function Register() {
     );
 
   const avatarChoices = useMemo(
-    () => avatarChoicesFor(form.gender, `${form.name || 'medicaps'}-${shuffle}`),
-    [form.gender, form.name, shuffle]
+    () => avatarChoicesFor(form.gender, shuffle),
+    [form.gender, shuffle]
   );
 
   const validateStep = () => {

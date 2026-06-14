@@ -100,7 +100,7 @@ export default function Chat() {
   };
 
   return (
-    <main className="mx-auto flex max-w-6xl" style={{ height: 'calc(100vh - 4rem)' }}>
+    <main className="mx-auto flex max-w-6xl" style={{ height: 'calc(100dvh - 4rem)' }}>
       {/* Sidebar */}
       <aside
         className={`w-full shrink-0 border-r border-paper/10 md:block md:w-80 ${roomId ? 'hidden' : 'block'}`}
@@ -110,7 +110,7 @@ export default function Chat() {
             Chats<span className="text-flame">.</span>
           </h1>
         </div>
-        <div className="nice-scroll h-[calc(100%-4.5rem)] overflow-y-auto">
+        <div className="nice-scroll h-[calc(100%-4.5rem)] overflow-y-auto pb-24 md:pb-0">
           {convos.length === 0 && (
             <p className="p-6 text-sm text-faded">
               No conversations yet.{' '}
