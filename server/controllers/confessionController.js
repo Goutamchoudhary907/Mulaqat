@@ -1,4 +1,5 @@
 import Confession from '../models/Confession.js';
+import User from '../models/User.js';
 import { pseudonym } from '../utils/helpers.js';
 
 function serialize(c, userId) {
@@ -23,12 +24,16 @@ export async function createConfession(req, res) {
   if (text.length < 3) return res.status(400).json({ message: 'Write a little more than that 😄' });
   if (text.length > 500) return res.status(400).json({ message: 'Keep it under 500 characters' });
 
-  const confession = await Confession.create({ author: req.userId, text, spot, pseudonym: pseudonym() });
+  const me = await User.findById(req.userId).select('college').lean();
+  const confession = await Confession.create({
+    author: req.userId, college: me.college, text, spot, pseudonym: pseudonym(),
+  });
   res.status(201).json(serialize(confession, req.userId));
 }
 
 export async function listConfessions(req, res) {
-  const list = await Confession.find().sort({ createdAt: -1 }).limit(80).lean();
+  const me = await User.findById(req.userId).select('college').lean();
+  const list = await Confession.find({ college: me.college }).sort({ createdAt: -1 }).limit(80).lean();
   res.json(list.map((c) => serialize(c, req.userId)));
 }
 

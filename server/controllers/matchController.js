@@ -8,6 +8,7 @@ export async function discover(req, res) {
 
   const query = {
     _id: { $nin: excluded },
+    college: me.college, // same-campus matching only
     interestedIn: { $in: ['everyone', me.gender] },
   };
   if (me.interestedIn !== 'everyone') query.gender = me.interestedIn;
@@ -30,6 +31,7 @@ export async function like(req, res) {
   const targetId = req.params.id;
   const [me, target] = await Promise.all([User.findById(req.userId), User.findById(targetId)]);
   if (!target) return res.status(404).json({ message: 'User not found' });
+  if (target.college !== me.college) return res.status(400).json({ message: 'You can only match within your campus' });
 
   if (!me.likes.map(String).includes(targetId)) me.likes.push(targetId);
 

@@ -63,7 +63,7 @@ export default function Profile() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-16 pt-8">
-      <p className="eyebrow">Your presence on campus</p>
+      <p className="eyebrow">{user.college || 'Your campus'}</p>
       <h1 className="mt-2 font-display text-4xl font-black">
         Your <em className="text-honey">profile</em>
       </h1>

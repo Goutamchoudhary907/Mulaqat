@@ -1,14 +1,19 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { clean } from '../utils/helpers.js';
+import { COLLEGES } from '../utils/colleges.js';
+import { defaultAvatar } from '../utils/avatar.js';
 
 const sign = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
 export async function register(req, res) {
-  const { name, email, password, gender, interestedIn, branch, year, bio, interests, vibe, avatar } = req.body;
+  const { name, email, password, college, gender, interestedIn, branch, year, bio, interests, vibe, avatar } = req.body;
 
-  if (!name || !email || !password || !gender || !interestedIn) {
+  if (!name || !email || !password || !college || !gender || !interestedIn) {
     return res.status(400).json({ message: 'Please fill in all the required fields' });
+  }
+  if (!COLLEGES.includes(college)) {
+    return res.status(400).json({ message: 'Please pick your college from the list' });
   }
   if (password.length < 6) {
     return res.status(400).json({ message: 'Password must be at least 6 characters' });
@@ -17,7 +22,11 @@ export async function register(req, res) {
   const exists = await User.findOne({ email: email.toLowerCase() });
   if (exists) return res.status(409).json({ message: 'An account with this email already exists' });
 
-  const user = await User.create({ name, email, password, gender, interestedIn, branch, year, bio, interests, vibe, avatar });
+  const user = await User.create({
+    name, email, password, college, gender, interestedIn, branch, year, bio, interests, vibe,
+    // New users always get a friendly default face; they can change it in onboarding.
+    avatar: avatar || defaultAvatar(gender, name),
+  });
   res.status(201).json({ token: sign(user._id), user: clean(user) });
 }
 

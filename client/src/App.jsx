@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Onboarding from './pages/Onboarding';
 import Discover from './pages/Discover';
 import Matches from './pages/Matches';
 import Chat from './pages/Chat';
@@ -18,13 +19,15 @@ function ScreenLoader() {
   );
 }
 
-/** Wraps app pages: requires login, adds the navbar + mobile tab-bar spacing. */
+/** Wraps app pages: requires login, adds navbar + mobile tab-bar spacing.
+   Profile completeness is NOT required here — only Discover locks itself until
+   the vibe check is done, so a fresh user can still browse Spotted & Profile. */
 function Protected({ children }) {
   const { user, loading } = useAuth();
   const { pathname } = useLocation();
   if (loading) return <ScreenLoader />;
   if (!user) return <Navigate to="/login" replace />;
- const inConversation = /^\/chat\/.+/.test(pathname);
+  const inConversation = /^\/chat\/.+/.test(pathname);
   return (
     <div className={`grain min-h-screen bg-ink ${inConversation ? '' : 'pb-20 md:pb-0'}`}>
       <Navbar />
@@ -33,7 +36,8 @@ function Protected({ children }) {
   );
 }
 
-/** Login/register/landing redirect to the app when already signed in. */
+/** Login/register/landing redirect to the app when already signed in.
+   Always lands on Discover — which itself prompts to finish the profile if needed. */
 function GuestOnly({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <ScreenLoader />;
@@ -49,6 +53,7 @@ export default function App() {
           <Route path="/" element={<GuestOnly><Landing /></GuestOnly>} />
           <Route path="/login" element={<GuestOnly><Login /></GuestOnly>} />
           <Route path="/register" element={<GuestOnly><Register /></GuestOnly>} />
+          <Route path="/onboarding" element={<Protected><Onboarding /></Protected>} />
           <Route path="/discover" element={<Protected><Discover /></Protected>} />
           <Route path="/matches" element={<Protected><Matches /></Protected>} />
           <Route path="/chat" element={<Protected><Chat /></Protected>} />

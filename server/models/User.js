@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { COLLEGES } from '../utils/colleges.js';
 
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, maxlength: 50 },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true, select: false },
+    // Matching is scoped to the user's own campus.
+    college: { type: String, enum: COLLEGES, required: true, index: true },
     gender: { type: String, enum: ['male', 'female', 'other'], required: true },
     interestedIn: { type: String, enum: ['male', 'female', 'everyone'], required: true },
     branch: { type: String, default: 'Other' },

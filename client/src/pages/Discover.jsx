@@ -6,13 +6,18 @@ import SwipeDeck from '../components/SwipeDeck';
 import MatchOverlay from '../components/MatchOverlay';
 
 export default function Discover() {
-  const { setAdmirers, admirers } = useAuth();
+  const { setAdmirers, admirers, profileComplete } = useAuth();
   const [deck, setDeck] = useState([]);
   const [myVibe, setMyVibe] = useState([]);
   const [loading, setLoading] = useState(true);
   const [match, setMatch] = useState(null);
 
   useEffect(() => {
+    // Discover stays locked until the vibe check is done — don't even fetch.
+    if (!profileComplete) {
+      setLoading(false);
+      return;
+    }
     api
       .get('/match/discover')
       .then(({ data }) => {
@@ -21,7 +26,7 @@ export default function Discover() {
         setAdmirers(data.admirers);
       })
       .finally(() => setLoading(false));
-  }, [setAdmirers]);
+  }, [setAdmirers, profileComplete]);
 
   const handleSwipe = async (action, card) => {
     setDeck((d) => d.filter((c) => c._id !== card._id));
@@ -56,7 +61,23 @@ export default function Discover() {
 
       {/* Deck area */}
       <div className="flex flex-1 items-start justify-center md:items-center">
-        {loading ? (
+        {!profileComplete ? (
+          <div className="card-elevated mx-auto max-w-md p-10 text-center">
+            <div
+              className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
+              style={{ background: 'var(--flame-soft)' }}
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--c-flame))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+            </div>
+            <h2 className="font-display text-2xl font-black">Finish your vibe check first</h2>
+            <p className="mt-2 text-faded">
+              Matching runs on your 5 vibe answers. Take a minute to finish your profile and the deck unlocks.
+            </p>
+            <Link to="/onboarding" className="btn-primary mt-6 inline-block">Complete my profile</Link>
+          </div>
+        ) : loading ? (
           <div className="flex h-full items-center justify-center pt-20">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-paper/10 border-t-flame" />
           </div>

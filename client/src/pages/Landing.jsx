@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { VIBE_QUESTIONS, niceAvatar } from '../lib/constants';
+import { VIBE_QUESTIONS, COLLEGES, niceAvatar } from '../lib/constants';
 import ThemeToggle from '../components/ThemeToggle';
 import Reveal from '../components/Reveal';
 
+// The hero word cycles and lands on the brand word. Keep each short so it fits.
+const HERO_WORDS = ['crush', 'match', 'partner', 'mulaqat'];
+
 const CAMPUS_PLACES = [
-  'MediSquare', 'V Block', 'Q Block', 'Canteen', 'CKD Square', 'Library', 'Bus Stand',
+  'The canteen', 'The library', 'Chai stall', 'The quad', 'Parking lot', 'Back benches', 'Bus stand',
 ];
 
 function PlacesTicker() {
@@ -36,13 +39,13 @@ function Ticket({ number, title, children, color }) {
 }
 
 const SPOTTED_SAMPLES = [
-  { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you made a bad Monday good.', who: 'Caffeinated Sparrow', spot: 'Main Canteen', rot: '-rotate-2' },
+  { text: 'To the girl in the blue kurti who laughed at my canteen tray disaster — you made a bad Monday good.', who: 'Caffeinated Sparrow', spot: 'Canteen', rot: '-rotate-2' },
   { text: "We've shared the library table four times. I bring extra pens hoping you'll forget yours.", who: 'Backbench Fox', spot: 'Library', rot: 'rotate-1' },
-  { text: 'You: red Activa, always parked crooked near CKD. Me: judging, but also kinda charmed.', who: 'Lowkey Panda', spot: 'CKD Square', rot: '-rotate-1' },
+  { text: 'You: red Activa, always parked crooked in the lot. Me: judging, but also kinda charmed.', who: 'Lowkey Panda', spot: 'Parking Lot', rot: '-rotate-1' },
 ];
 
 const COMPARISONS = [
-  ['Strangers from anywhere', 'Only Medicaps students'],
+  ['Strangers from anywhere', 'Only students from your college'],
   ['Swipe on faces', 'See your vibe % first'],
   ['"hey" … "hey" … silence', 'Icebreakers from shared answers'],
   ['Catfish roulette', 'Hand-drawn avatars, zero pressure'],
@@ -51,7 +54,13 @@ const COMPARISONS = [
 
 export default function Landing() {
   const [picked, setPicked] = useState(null);
+  const [wordIdx, setWordIdx] = useState(0);
   const teaser = VIBE_QUESTIONS[0];
+
+  useEffect(() => {
+    const id = setInterval(() => setWordIdx((i) => (i + 1) % HERO_WORDS.length), 1900);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="grain relative min-h-screen overflow-x-clip bg-ink">
@@ -81,21 +90,19 @@ export default function Landing() {
               {/* Words */}
               <div>
                 <h1
-                  className="hero-rise font-display font-black leading-[1.04]"
-                  style={{ '--d': '0.18s', fontSize: 'clamp(38px, 6vw, 64px)', marginTop: 0 }}
+                  className="hero-rise font-display font-black leading-[1.05]"
+                  style={{ '--d': '0.18s', fontSize: 'clamp(40px, 6.5vw, 68px)', marginTop: 0 }}
                 >
-                  Somewhere between{' '}
-                  <em className="underline-draw text-flame" style={{ '--d': '1.25s' }}>MediSquare</em>{' '}
-                  and the canteen{' '}
-                  <em className="underline-draw text-flame" style={{ '--d': '1.5s' }}>chai line</em>,
-                  your person is waiting.
+                  Your campus{' '}
+                  <span key={wordIdx} className="word-swap text-flame">{HERO_WORDS[wordIdx]}</span>
+                  <br />is one vibe check away.
                 </h1>
                 <p
                   className="hero-rise max-w-md leading-relaxed text-faded"
                   style={{ '--d': '0.32s', marginTop: 22, fontSize: 18 }}
                 >
                   Match by <strong className="text-paper">vibe</strong>, not just photos.
-                  No randoms, no bots — just Medicaps.
+                  No randoms, no bots — just real students from your college.
                 </p>
                 <div
                   className="hero-rise flex flex-wrap items-center gap-3"
@@ -148,7 +155,7 @@ export default function Landing() {
                   className="stamp-in absolute -bottom-4 -left-5 -rotate-3 sticker sticker-berry px-3 py-1 text-sm shadow-sticker"
                   style={{ '--d': '1.75s', '--stamp-rot': '-3deg' }}
                 >
-                  spotted @ MediSquare
+                  spotted on campus
                 </span>
               </div>
             </div>
@@ -157,6 +164,34 @@ export default function Landing() {
       </div>
 
       <PlacesTicker />
+
+      {/* Now live at — driven by the COLLEGES list */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <Reveal>
+          <p className="eyebrow text-center">Now live across Indore&apos;s campuses</p>
+          <h2 className="mt-3 text-center font-display text-3xl font-black sm:text-4xl">
+            Is your college <em className="text-flame">in</em>?
+          </h2>
+        </Reveal>
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {COLLEGES.map((college, i) => (
+            <Reveal key={college} delay={i * 90}>
+              <div className="card-elevated flex h-full items-center gap-3 p-5">
+                <span className="relative flex h-2.5 w-2.5 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                </span>
+                <span className="font-display text-lg font-black leading-tight">{college}</span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={COLLEGES.length * 90}>
+          <p className="mt-6 text-center text-sm text-faded">
+            More colleges coming soon — drag your campus into the mix.
+          </p>
+        </Reveal>
+      </section>
 
       {/* Stats */}
       <section className="border-b border-paper/10 bg-coal/60">
@@ -186,17 +221,17 @@ export default function Landing() {
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <Reveal delay={0}>
             <Ticket number="01" title="Take the vibe check" color="rgb(var(--c-flame))">
-              Five delightfully unserious questions — we figure out who gets your 2 AM memes.
+              Five fun questions. We decode your vibe.
             </Ticket>
           </Reveal>
           <Reveal delay={130}>
             <Ticket number="02" title="Swipe the campus" color="rgb(var(--c-honey))">
-              Every profile is a Medicaps student. Your vibe % shows before you swipe.
+              Real students only. Vibe % before you swipe.
             </Ticket>
           </Reveal>
           <Reveal delay={260}>
             <Ticket number="03" title="Get spotted" color="rgb(var(--c-berry))">
-              Locked eyes at MediSquare? Post it anonymously and let the reactions do the rest.
+              Caught a glance? Post it anonymously.
             </Ticket>
           </Reveal>
         </div>
@@ -313,8 +348,8 @@ export default function Landing() {
           MULAQAT
         </p>
         <p className="mt-6 text-center text-sm text-faded">
-          Made with <span className="text-flame">♥</span> for Medi-Caps University, Indore —
-          from MediSquare to the Bus Stand and everywhere in between.
+          Made with <span className="text-flame">♥</span> for Indore&apos;s campuses —
+          from the canteen queue to the last bench and everywhere in between.
         </p>
         <p className="mt-2 text-center text-xs text-faded/50">
           Be kind. Be respectful. The Spotted wall sees everything.

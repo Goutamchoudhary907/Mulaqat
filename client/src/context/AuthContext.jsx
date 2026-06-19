@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import api from '../lib/api';
-import { API_URL } from '../lib/constants';
+import { API_URL, VIBE_COUNT } from '../lib/constants';
 
 const AuthContext = createContext(null);
 
@@ -66,6 +66,11 @@ export function AuthProvider({ children }) {
     setAdmirers(0);
   };
 
+  // Matching needs the 5 vibe answers — until then Discover stays locked,
+  // but the rest of the app (Spotted, Profile, etc.) is open.
+  const profileComplete =
+    Array.isArray(user?.vibe) && user.vibe.length === VIBE_COUNT && user.vibe.every((v) => v !== null && v !== undefined);
+
   return (
     <AuthContext.Provider
       value={{
@@ -74,6 +79,7 @@ export function AuthProvider({ children }) {
         admirers,
         setAdmirers,
         loading,
+        profileComplete,
         login,
         register,
         logout,

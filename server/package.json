@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "migrate:college": "node scripts/backfillCollege.js",
+    "migrate:reset-vibe": "node scripts/resetVibe.js"
   },
   "nodemonConfig": {
     "ignore": [

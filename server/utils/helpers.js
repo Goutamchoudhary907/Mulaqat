@@ -23,8 +23,10 @@ export function compatibility(a, b) {
   for (let i = 0; i < Math.min(va.length, vb.length); i++) {
     if (va[i] === vb[i]) same++;
   }
+  // Divide by the number of questions answered (adapts if the question count changes).
+  const total = Math.max(va.length, vb.length, 1);
   const shared = (a.interests || []).filter((i) => (b.interests || []).includes(i)).length;
-  const score = Math.round((same / 5) * 65 + Math.min(shared, 4) * 8.75);
+  const score = Math.round((same / total) * 65 + Math.min(shared, 4) * 8.75);
   return Math.max(12, Math.min(100, score));
 }
 

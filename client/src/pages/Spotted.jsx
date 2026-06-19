@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import api, { errMsg } from '../lib/api';
-import { SPOTS } from '../lib/constants';
+import { spotsForCollege } from '../lib/constants';
+import { useAuth } from '../context/AuthContext';
 import { timeAgo } from '../lib/util';
 
 const IcoHeart = () => (
@@ -28,10 +29,13 @@ const IcoPaper = () => (
 );
 
 export default function Spotted() {
+  const { user } = useAuth();
+  const spots = useMemo(() => spotsForCollege(user?.college), [user?.college]);
+
   const [confessions, setConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
-  const [spot, setSpot] = useState(SPOTS[0]);
+  const [spot, setSpot] = useState(spots[0]);
   const [error, setError] = useState('');
   const [posting, setPosting] = useState(false);
 
@@ -108,7 +112,7 @@ export default function Spotted() {
         />
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span className="eyebrow">Spotted at:</span>
-          {SPOTS.map((s) => (
+          {spots.map((s) => (
             <button
               type="button"
               key={s}
