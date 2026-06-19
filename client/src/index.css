@@ -191,6 +191,11 @@
     background: var(--cream);
     border-radius: var(--r-xl);
     overflow: hidden;
+    color-scheme: light; /* always a light surface — opt out of mobile force-dark */
+  }
+
+   .bg-cream {
+    color-scheme: light;
   }
 
   /* Eyebrow / label type */
