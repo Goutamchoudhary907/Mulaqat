@@ -10,9 +10,7 @@ function serialize(c, userId) {
     spot: obj.spot,
     pseudonym: obj.pseudonym,
     hearts: obj.hearts.length,
-    eyes: obj.eyes.length,
     hearted: obj.hearts.map(String).includes(String(userId)),
-    eyed: obj.eyes.map(String).includes(String(userId)),
     mine: String(obj.author) === String(userId),
     createdAt: obj.createdAt,
   };
@@ -38,17 +36,17 @@ export async function listConfessions(req, res) {
 }
 
 export async function reactConfession(req, res) {
-  const { type } = req.body; // 'hearts' | 'eyes'
-  if (!['hearts', 'eyes'].includes(type)) return res.status(400).json({ message: 'Invalid reaction' });
+  const { type } = req.body; // 'hearts'
+  if (type !== 'hearts') return res.status(400).json({ message: 'Invalid reaction' });
 
   const confession = await Confession.findById(req.params.id);
   if (!confession) return res.status(404).json({ message: 'Confession not found' });
 
-  const already = confession[type].map(String).includes(req.userId);
+  const already = confession.hearts.map(String).includes(req.userId);
   if (already) {
-    confession[type] = confession[type].filter((u) => String(u) !== req.userId);
+    confession.hearts = confession.hearts.filter((u) => String(u) !== req.userId);
   } else {
-    confession[type].push(req.userId);
+    confession.hearts.push(req.userId);
   }
   await confession.save();
   res.json(serialize(confession, req.userId));

@@ -10,7 +10,6 @@ const confessionSchema = new mongoose.Schema(
     text: { type: String, required: true, trim: true, maxlength: 500 },
     spot: { type: String, default: 'Somewhere on campus' },
     hearts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    eyes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
   { timestamps: true }
 );

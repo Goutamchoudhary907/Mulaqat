@@ -10,12 +10,6 @@ const IcoHeart = () => (
   </svg>
 );
 
-const IcoEye = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-  </svg>
-);
-
 const IcoTrash = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
@@ -164,15 +158,6 @@ export default function Spotted() {
                   }`}
                 >
                   <IcoHeart /> {c.hearts}
-                </button>
-                <button
-                  onClick={() => react(c._id, 'eyes')}
-                  className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-bold transition ${
-                    c.eyed ? 'bg-carbon/15 text-carbon' : 'text-carbon/50 hover:bg-carbon/5'
-                  }`}
-                  title="was this… me?"
-                >
-                  <IcoEye /> {c.eyes}
                 </button>
                 <span className="ml-auto text-xs text-carbon/40">{timeAgo(c.createdAt)}</span>
                 {c.mine && (

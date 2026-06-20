@@ -30,12 +30,16 @@ export function compatibility(a, b) {
   return Math.max(12, Math.min(100, score));
 }
 
-const ADJECTIVES = ['Shy', 'Caffeinated', 'Mysterious', 'Sleepy', 'Dramatic', 'Lowkey', 'Chaotic', 'Soft-spoken', 'Backbench', 'First-bench', 'Overthinking', 'Daydreaming'];
-const ANIMALS = ['Sparrow', 'Panda', 'Fox', 'Pigeon', 'Cat', 'Otter', 'Koala', 'Parrot', 'Deer', 'Penguin', 'Squirrel', 'Owl'];
+const ALIASES = [
+  'Echo', 'Ember', 'Nova', 'Wren', 'Sage', 'Onyx', 'Vale', 'Frost',
+  'Haze', 'Drift', 'Quill', 'Lark', 'Reef', 'Dune', 'Bloom', 'Ash',
+  'Cove', 'Slate', 'Rune', 'Fable', 'Wisp', 'Pine', 'Moss', 'Clove',
+  'Iris', 'Juno', 'Kite', 'Sol', 'Tide', 'Cedar', 'Indigo', 'Marlow',
+  'Birch', 'Aspen', 'Willow', 'Fern', 'Ivy', 'Reed', 'Hazel', 'Briar',
+  'Mist', 'Dawn', 'Dusk', 'Flint', 'Cinder', 'Ridge', 'Storm', 'Raven',
+  'Finch', 'Sable', 'Halo', 'Ripple', 'Spark', 'Vesper', 'Solace', 'Lumen',
+];
 
-/** Anonymous-but-charming identity for Spotted wall posts. */
 export function pseudonym() {
-  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-  const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
-  return `${adj} ${animal}`;
+  return ALIASES[Math.floor(Math.random() * ALIASES.length)];
 }
