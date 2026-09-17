@@ -17,12 +17,15 @@ import userRoutes from './routes/userRoutes.js';
 import matchRoutes from './routes/matchRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import confessionRoutes from './routes/confessionRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+// Render runs behind a proxy — needed so rate limiting keys on the real client IP.
+app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 const io = new Server(server, { cors: { origin: true } });
@@ -37,6 +40,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/match', matchRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/confessions', confessionRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Any unmatched /api route is a real 404 — never fall through to the SPA.
 app.use('/api', (req, res) => res.status(404).json({ message: 'Not found' }));

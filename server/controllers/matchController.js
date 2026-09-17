@@ -4,7 +4,9 @@ import { compatibility, roomIdFor } from '../utils/helpers.js';
 
 export async function discover(req, res) {
   const me = await User.findById(req.userId);
-  const excluded = [me._id, ...me.likes, ...me.passes, ...me.matches];
+  // Hide anyone I blocked, and anyone who blocked me.
+  const blockedMe = await User.find({ blocked: me._id }).distinct('_id');
+  const excluded = [me._id, ...me.likes, ...me.passes, ...me.matches, ...(me.blocked || []), ...blockedMe];
 
   const query = {
     _id: { $nin: excluded },
@@ -55,6 +57,21 @@ export async function pass(req, res) {
   const me = await User.findById(req.userId);
   if (!me.passes.map(String).includes(req.params.id)) me.passes.push(req.params.id);
   await me.save();
+  res.json({ ok: true });
+}
+
+// Unmatch: remove the match both ways, delete the chat, don't resurface them.
+export async function unmatch(req, res) {
+  const targetId = req.params.id;
+  const [me, target] = await Promise.all([User.findById(req.userId), User.findById(targetId)]);
+  if (!target) return res.status(404).json({ message: 'User not found' });
+
+  me.matches = me.matches.filter((u) => String(u) !== targetId);
+  target.matches = target.matches.filter((u) => String(u) !== String(me._id));
+  if (!me.passes.map(String).includes(targetId)) me.passes.push(targetId);
+
+  await Promise.all([me.save(), target.save()]);
+  await Message.deleteMany({ roomId: roomIdFor(me._id, targetId) });
   res.json({ ok: true });
 }
 

@@ -22,6 +22,12 @@ const IcoPaper = () => (
   </svg>
 );
 
+const IcoFlag = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+  </svg>
+);
+
 export default function Spotted() {
   const { user } = useAuth();
   const spots = useMemo(() => spotsForCollege(user?.college), [user?.college]);
@@ -32,6 +38,7 @@ export default function Spotted() {
   const [spot, setSpot] = useState(spots[0]);
   const [error, setError] = useState('');
   const [posting, setPosting] = useState(false);
+  const [reported, setReported] = useState(() => new Set());
 
   useEffect(() => {
     api
@@ -70,6 +77,16 @@ export default function Spotted() {
       setConfessions((list) => list.filter((c) => c._id !== id));
     } catch {
       /* ignore */
+    }
+  };
+
+  const report = async (id) => {
+    if (!window.confirm('Report this confession to the moderators?')) return;
+    try {
+      await api.post('/reports', { targetType: 'confession', targetId: id });
+      setReported((s) => new Set(s).add(id));
+    } catch {
+      /* best-effort */
     }
   };
 
@@ -160,13 +177,23 @@ export default function Spotted() {
                   <IcoHeart /> {c.hearts}
                 </button>
                 <span className="ml-auto text-xs text-carbon/40">{timeAgo(c.createdAt)}</span>
-                {c.mine && (
+                {c.mine ? (
                   <button
                     onClick={() => remove(c._id)}
                     className="text-carbon/40 hover:text-flame transition"
                     title="Delete your confession"
                   >
                     <IcoTrash />
+                  </button>
+                ) : reported.has(c._id) ? (
+                  <span className="text-[11px] font-bold text-carbon/40">Reported</span>
+                ) : (
+                  <button
+                    onClick={() => report(c._id)}
+                    className="text-carbon/40 hover:text-flame transition"
+                    title="Report this confession"
+                  >
+                    <IcoFlag />
                   </button>
                 )}
               </div>

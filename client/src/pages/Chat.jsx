@@ -17,6 +17,12 @@ const IcoBack = () => (
   </svg>
 );
 
+const IcoDots = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
+  </svg>
+);
+
 export default function Chat() {
   const { roomId } = useParams();
   const navigate = useNavigate();
@@ -26,6 +32,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [partnerTyping, setPartnerTyping] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const bottomRef = useRef(null);
   const roomRef = useRef(roomId);
@@ -97,6 +104,32 @@ export default function Chat() {
       lastTypingSent.current = now;
       getSocket()?.emit('typing', roomId);
     }
+  };
+
+  // Leave the open conversation (after unmatch/block) and return to the list.
+  const exitConversation = () => {
+    setMenuOpen(false);
+    setConvos((list) => list.filter((c) => c.roomId !== roomId));
+    navigate('/chat');
+  };
+
+  const doUnmatch = async () => {
+    if (!active || !window.confirm(`Unmatch ${active.user.name}? This permanently deletes your chat.`)) return;
+    try { await api.post(`/match/unmatch/${active.user._id}`); } catch { /* best-effort */ }
+    exitConversation();
+  };
+
+  const doBlock = async () => {
+    if (!active || !window.confirm(`Block ${active.user.name}? They won't be able to see or message you.`)) return;
+    try { await api.post(`/users/block/${active.user._id}`); } catch { /* best-effort */ }
+    exitConversation();
+  };
+
+  const doReport = async () => {
+    if (!active || !window.confirm(`Report ${active.user.name} to the moderators?`)) return;
+    try { await api.post('/reports', { targetType: 'user', targetId: active.user._id }); } catch { /* best-effort */ }
+    setMenuOpen(false);
+    window.alert('Reported. Thanks — we’ll take a look.');
   };
 
   return (
@@ -179,6 +212,25 @@ export default function Chat() {
                 </p>
               </div>
               <span className="sticker hidden text-xs sm:inline-block">{active.compatibility}% vibe</span>
+              <div className="relative">
+                <button
+                  onClick={() => setMenuOpen((o) => !o)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-faded transition hover:bg-paper/5 hover:text-paper"
+                  title="Options"
+                >
+                  <IcoDots />
+                </button>
+                {menuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+                    <div className="absolute right-0 top-11 z-20 w-44 overflow-hidden rounded-xl border border-paper/15 bg-coal py-1" style={{ boxShadow: 'var(--shadow-md)' }}>
+                      <button onClick={doReport} className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-paper transition hover:bg-paper/5">Report</button>
+                      <button onClick={doBlock} className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-paper transition hover:bg-paper/5">Block</button>
+                      <button onClick={doUnmatch} className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-flame transition hover:bg-flame/10">Unmatch</button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Messages */}
