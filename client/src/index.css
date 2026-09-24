@@ -126,6 +126,21 @@
     letter-spacing: 0;
   }
 
+  /* Heading accent — same font/case as the heading, just the flame colour. */
+  .hl-mark {
+    color: rgb(var(--c-flame));
+  }
+
+  /* Rotating hero word — re-mounts on each change (via React key) to replay. */
+  .word-swap {
+    display: inline-block;
+    animation: wordSwap 0.5s var(--ease-out-expo);
+  }
+  @keyframes wordSwap {
+    0%   { opacity: 0; transform: translateY(0.5em) rotate(-3deg); }
+    100% { opacity: 1; transform: translateY(0) rotate(0); }
+  }
+
   .field {
     @apply w-full rounded-xl border border-paper/15 bg-coal px-4 py-3 text-paper outline-none transition;
     font-family: inherit;
@@ -176,6 +191,11 @@
     background: var(--cream);
     border-radius: var(--r-xl);
     overflow: hidden;
+    color-scheme: light; /* always a light surface — opt out of mobile force-dark */
+  }
+
+   .bg-cream {
+    color-scheme: light;
   }
 
   /* Eyebrow / label type */

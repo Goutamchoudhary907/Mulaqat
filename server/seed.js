@@ -65,9 +65,14 @@ export async function seedIfEmpty() {
 
   console.log('🌱 Empty database — planting sample Medicaps students…');
 
+  const SEED_COLLEGE = 'Medi-Caps University';
+
   const users = await User.create(
-    SAMPLE_STUDENTS.map((s) => ({
+    SAMPLE_STUDENTS.map((s, i) => ({
       ...s,
+      college: SEED_COLLEGE,
+      // Sample data predates the 6th vibe question — pad to a full answer set.
+      vibe: s.vibe.length >= 6 ? s.vibe.slice(0, 6) : [...s.vibe, i % 4],
       email: `${s.name.split(' ')[0].toLowerCase()}@medicaps.ac.in`,
       password: 'medicaps123',
       avatar: avatar(s.gender, s.name),
@@ -77,6 +82,7 @@ export async function seedIfEmpty() {
   await Confession.create(
     SAMPLE_CONFESSIONS.map((c, i) => ({
       ...c,
+      college: SEED_COLLEGE,
       author: users[i % users.length]._id,
       pseudonym: pseudonym(),
       hearts: users.slice(0, (i * 3) % 9).map((u) => u._id),

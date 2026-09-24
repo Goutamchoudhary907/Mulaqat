@@ -4,26 +4,33 @@ export const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const VIBE_QUESTIONS = [
   {
-    q: "It's 6 PM after the last lecture. Where are you?",
-    options: ['Chai at Canteen ☕', 'Straight home, headphones on 🎧', 'Ground — sports till dark 🏏', 'Roaming Treasure Island 🛍️'],
+    q: "It's a free evening after class. Your move?",
+    options: ['Out with friends 🎉', 'Home & recharge 🎧', 'Ground or gym 🏏', 'Roaming the city 🛍️'],
   },
   {
     q: 'Exam season strategy?',
-    options: ['Library since day one 📚', 'One legendary all-nighter 🌙', 'Group study (10% study) 👥', 'Bhagwan bharose 🙏'],
+    options: ['Studied since day one 📚', 'One epic all-nighter 🌙', 'Group study (10% study) 👥', 'Bhagwan bharose 🙏'],
   },
   {
     q: 'Your love language is…',
-    options: ['Sending memes at 2 AM 😂', 'Long deep talks 🌌', 'Sharing food (huge deal) 🍕', 'Making playlists 🎶'],
+    options: ['Memes at 2 AM 😂', 'Deep late-night talks 🌌', 'Sharing food 🍕', 'Making playlists 🎶'],
   },
   {
-    q: 'Ideal first mulaqat?',
-    options: ['Samosa at the Main Canteen 🥟', 'Sunset walk to MediSquare 🌇', 'Movie + bhutta 🍿', 'Long ride on the bypass 🏍️'],
+    q: 'Ideal first date?',
+    options: ['Coffee & a long chat ☕', 'Street-food crawl 🥟', 'Movie & snacks 🍿', 'Long drive or walk 🛵'],
   },
   {
     q: 'Your texting style?',
-    options: ['Replies in 0.2 seconds ⚡', 'Seen. Will reply… eventually 💤', 'Voice notes only 🎙️', 'Full paragraphs, full grammar ✍️'],
+    options: ['Replies in 0.2 seconds ⚡', 'Seen… reply later 💤', 'Voice notes only 🎙️', 'Full paragraphs ✍️'],
+  },
+  {
+    q: 'What are you here for?',
+    options: ['Something real 💘', 'Keep it casual 😎', 'New friends 🤝', "Let's just vibe ✨"],
   },
 ];
+
+// One place to know how many vibe answers a complete profile needs.
+export const VIBE_COUNT = VIBE_QUESTIONS.length;
 
 export const INTERESTS = [
   'Music', 'Foodie', 'Gym', 'Cricket', 'Coding', 'Anime', 'Photography', 'Dance',
@@ -38,10 +45,32 @@ export const BRANCHES = [
 
 export const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'PG','Pass out'];
 
-export const SPOTS = [
-  'MediSquare', 'Canteen', 'V Block', 'Q Block', 'CKD','Admission cell',
+// Campuses Mulaqat is open to. Matching + Spotted are scoped per college.
+// Keep identical to server/utils/colleges.js → COLLEGES.
+export const COLLEGES = [
+  'Medi-Caps University',
+  'IPS Academy',
+  'Sage University',
+  'Acropolis Institute',
+];
+
+// Spotted-wall venues. Medi-Caps keeps its real campus spots; the other
+// colleges get generic ones until we add their own named places.
+const MEDICAPS_SPOTS = [
+  'MediSquare', 'Canteen', 'V Block', 'Q Block', 'CKD', 'Admission cell',
   'CKD Square', 'Library', 'Bus Stand', 'Somewhere on campus',
 ];
+
+const GENERIC_SPOTS = [
+  'Canteen', 'Library', 'Parking lot', 'Main gate', 'Classroom block',
+  'Ground', 'Auditorium', 'Bus stand', 'Somewhere on campus',
+];
+
+export const spotsForCollege = (college) =>
+  college === 'Medi-Caps University' ? MEDICAPS_SPOTS : GENERIC_SPOTS;
+
+// Generic default, kept for any non-college-specific usage.
+export const SPOTS = GENERIC_SPOTS;
 
 export const avatarUrl = (style, seed, opts) => {
   const params = new URLSearchParams();

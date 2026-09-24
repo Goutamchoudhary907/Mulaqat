@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import api, { errMsg } from '../lib/api';
-import { SPOTS } from '../lib/constants';
+import { spotsForCollege } from '../lib/constants';
+import { useAuth } from '../context/AuthContext';
 import { timeAgo } from '../lib/util';
 
 const IcoHeart = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0">
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-);
-
-const IcoEye = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
   </svg>
 );
 
@@ -27,13 +22,23 @@ const IcoPaper = () => (
   </svg>
 );
 
+const IcoFlag = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+  </svg>
+);
+
 export default function Spotted() {
+  const { user } = useAuth();
+  const spots = useMemo(() => spotsForCollege(user?.college), [user?.college]);
+
   const [confessions, setConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
-  const [spot, setSpot] = useState(SPOTS[0]);
+  const [spot, setSpot] = useState(spots[0]);
   const [error, setError] = useState('');
   const [posting, setPosting] = useState(false);
+  const [reported, setReported] = useState(() => new Set());
 
   useEffect(() => {
     api
@@ -75,6 +80,16 @@ export default function Spotted() {
     }
   };
 
+  const report = async (id) => {
+    if (!window.confirm('Report this confession to the moderators?')) return;
+    try {
+      await api.post('/reports', { targetType: 'confession', targetId: id });
+      setReported((s) => new Set(s).add(id));
+    } catch {
+      /* best-effort */
+    }
+  };
+
   return (
     <main className="mx-auto max-w-6xl px-4 pb-16 pt-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -108,7 +123,7 @@ export default function Spotted() {
         />
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span className="eyebrow">Spotted at:</span>
-          {SPOTS.map((s) => (
+          {spots.map((s) => (
             <button
               type="button"
               key={s}
@@ -161,23 +176,24 @@ export default function Spotted() {
                 >
                   <IcoHeart /> {c.hearts}
                 </button>
-                <button
-                  onClick={() => react(c._id, 'eyes')}
-                  className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-bold transition ${
-                    c.eyed ? 'bg-carbon/15 text-carbon' : 'text-carbon/50 hover:bg-carbon/5'
-                  }`}
-                  title="was this… me?"
-                >
-                  <IcoEye /> {c.eyes}
-                </button>
                 <span className="ml-auto text-xs text-carbon/40">{timeAgo(c.createdAt)}</span>
-                {c.mine && (
+                {c.mine ? (
                   <button
                     onClick={() => remove(c._id)}
                     className="text-carbon/40 hover:text-flame transition"
                     title="Delete your confession"
                   >
                     <IcoTrash />
+                  </button>
+                ) : reported.has(c._id) ? (
+                  <span className="text-[11px] font-bold text-carbon/40">Reported</span>
+                ) : (
+                  <button
+                    onClick={() => report(c._id)}
+                    className="text-carbon/40 hover:text-flame transition"
+                    title="Report this confession"
+                  >
+                    <IcoFlag />
                   </button>
                 )}
               </div>
