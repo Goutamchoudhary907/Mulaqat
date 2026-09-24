@@ -68,6 +68,8 @@ export async function unmatch(req, res) {
 
   me.matches = me.matches.filter((u) => String(u) !== targetId);
   target.matches = target.matches.filter((u) => String(u) !== String(me._id));
+  // Drop my like too, or their next like would see it and instantly re-match us.
+  me.likes = me.likes.filter((u) => String(u) !== targetId);
   if (!me.passes.map(String).includes(targetId)) me.passes.push(targetId);
 
   await Promise.all([me.save(), target.save()]);
